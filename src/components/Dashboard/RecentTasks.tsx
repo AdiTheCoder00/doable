@@ -10,8 +10,8 @@ export default function RecentTasks() {
       <div className="w-full">
         <h2 className="mb-4 text-2xl font-bold text-[var(--text)]">Recent Tasks</h2>
         <div className="flex flex-col items-center justify-center rounded-2xl border border-[var(--border)] bg-[var(--bg-elev)] p-10 text-center shadow-sm">
-          <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-orange-100 dark:bg-orange-950/30 text-[var(--accent)]">
-            <LayoutGrid size={32} />
+          <div className="mb-4 flex items-center justify-center text-[var(--accent)]">
+            <LayoutGrid size={40} strokeWidth={1.5} />
           </div>
           <div className="text-[var(--text-dim)] font-medium">No tasks yet. Start one to build your world.</div>
         </div>

@@ -12,11 +12,11 @@ export default function Navbar() {
   return (
     <nav 
       className={`sticky top-0 z-40 flex items-center justify-between px-8 py-4 transition-colors ${
-        state.inApp ? 'border-b border-[var(--border)] bg-[var(--bg-elev)]' : 'bg-transparent'
+        state.inApp ? 'bg-[var(--bg)]' : 'bg-transparent'
       }`}
     >
       {/* Left: Logo */}
-      <div className="brand flex items-center cursor-pointer" onClick={exitApp} role="button" tabIndex={0}>
+      <div className="brand flex items-center cursor-pointer border-none outline-none translate-y-1" onClick={exitApp} role="button" tabIndex={0}>
         <span className="shiny-logo">Doable.</span>
       </div>
 
