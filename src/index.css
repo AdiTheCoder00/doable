@@ -180,10 +180,16 @@ nav .stat-pill {
 }
 
 /* landing */
+#view-landing {
+  min-height: calc(100vh - 73px);
+  display: flex;
+  align-items: center;
+}
 #view-landing .hero {
   background: var(--grad-hero);
-  padding: 100px 28px 70px;
+  padding: 60px 28px;
   text-align: center;
+  flex: 1;
 }
 .eyebrow {
   display: inline-flex;

@@ -7,21 +7,11 @@ export default function Navbar() {
     setTheme(state.theme === 'dark' ? 'light' : 'dark');
   };
 
-  const handleScrollToHow = () => {
-    document.getElementById('how-section')?.scrollIntoView({ behavior: 'smooth' });
-  };
-
   return (
     <nav id="mainnav">
       <div className="brand">
         <span className="mark">\u2713</span> Doable.
       </div>
-
-      {!state.inApp && (
-        <div className="navlinks" id="navlinks-landing">
-          <a className="navlink" onClick={handleScrollToHow}>How it works</a>
-        </div>
-      )}
 
       {state.inApp && (
         <div className="navlinks" id="navlinks-app">

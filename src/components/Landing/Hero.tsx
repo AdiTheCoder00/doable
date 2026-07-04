@@ -3,10 +3,6 @@ import { useApp } from '../../context/AppContext';
 export default function Hero() {
   const { enterApp } = useApp();
 
-  const scrollToHow = () => {
-    document.getElementById('how-section')?.scrollIntoView({ behavior: 'smooth' });
-  };
-
   return (
     <div className="hero">
       <span className="eyebrow">
@@ -20,7 +16,6 @@ export default function Hero() {
       </p>
       <div className="hero-ctas">
         <button className="btn-primary" onClick={enterApp}>Start a Task \u2192</button>
-        <button className="btn-ghost" onClick={scrollToHow}>How it works</button>
       </div>
     </div>
   );
