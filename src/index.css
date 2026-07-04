@@ -1,3 +1,28 @@
+@import "tailwindcss";
+
+@theme {
+  --color-background: var(--bg);
+  --color-foreground: var(--text);
+  --color-card: var(--bg-elev);
+  --color-card-foreground: var(--text);
+  --color-popover: var(--bg-elev);
+  --color-popover-foreground: var(--text);
+  --color-primary: var(--accent);
+  --color-primary-foreground: var(--accent-text);
+  --color-secondary: var(--bg-elev-2);
+  --color-secondary-foreground: var(--text);
+  --color-muted: var(--bg-elev-2);
+  --color-muted-foreground: var(--text-dim);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-text);
+  --color-destructive: var(--coral);
+  --color-destructive-foreground: #fff;
+  --color-border: var(--border);
+  --color-input: var(--border);
+  --color-ring: var(--accent);
+  --radius: 0.625rem;
+}
+
 :root[data-theme="dark"] {
   --bg: #0c0c0d; --bg-elev: #171718; --bg-elev-2: #212022; --border: #333031;
   --text: #f7f5f2; --text-dim: #aaa6a1; --text-faint: #726d68;

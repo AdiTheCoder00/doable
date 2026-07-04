@@ -1,5 +1,18 @@
+import { motion, type Variants } from 'framer-motion';
 import { useApp } from '../../context/AppContext';
 import PixelBlast from '../PixelBlast/PixelBlast';
+
+const container: Variants = {
+  hidden: {},
+  show: {
+    transition: { staggerChildren: 0.15, delayChildren: 0.2 },
+  },
+};
+
+const item: Variants = {
+  hidden: { opacity: 0, y: 30 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } },
+};
 
 export default function Hero() {
   const { enterApp } = useApp();
@@ -27,20 +40,20 @@ export default function Hero() {
           transparent
         />
       </div>
-      <div className="hero-content">
-        <span className="eyebrow">
+      <motion.div className="hero-content" variants={container} initial="hidden" animate="show">
+        <motion.span className="eyebrow" variants={item}>
           <span className="dot" /> Personal accountability, not plagiarism policing
-        </span>
-        <h1>
+        </motion.span>
+        <motion.h1 variants={item}>
           AI that will <br /><span className="hl">HELP YOU MASTER TOPICS.</span>
-        </h1>
-        <p className="sub">
+        </motion.h1>
+        <motion.p className="sub" variants={item}>
           Ask your question, get a real roadmap, and actually finish it. Upload proof, earn tokens, watch your island grow  no plagiarism checker required.
-        </p>
-        <div className="hero-ctas">
-          <button className="btn-primary" onClick={enterApp}>Start a Task </button>
-        </div>
-      </div>
+        </motion.p>
+        <motion.div className="hero-ctas" variants={item}>
+          <button className="btn-primary" onClick={enterApp}>Start a Task</button>
+        </motion.div>
+      </motion.div>
     </div>
   );
 }
