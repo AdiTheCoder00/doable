@@ -45,20 +45,6 @@ export default function ChatEntry({ entry }: Props) {
               <p style={{ color: 'var(--text-dim)', fontSize: '14px', margin: '0 0 14px' }}>
                 Turn this into small steps you complete for real  with proof and tokens along the way.
               </p>
-              <div className="seriousness" id={`ser-${entry.id}`}>
-                {(['curious', 'learn', 'master'] as Seriousness[]).map((level) => (
-                  <div
-                    key={level}
-                    className={`ser-opt${entry.seriousness === level ? ' sel' : ''}`}
-                    onClick={() => handleSeriousness(level)}
-                  >
-                    <span className="e">
-                      {level === 'curious' ? '\u{1F440}' : level === 'learn' ? '\u{1F4D8}' : '\u{1F3C6}'}
-                    </span>
-                    {level.charAt(0).toUpperCase() + level.slice(1)}
-                  </div>
-                ))}
-              </div>
               <div style={{ display: 'flex', gap: '10px' }}>
                 <button
                   className="btn-primary"

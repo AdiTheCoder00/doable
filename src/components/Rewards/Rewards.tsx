@@ -1,53 +1,122 @@
 import { useApp } from '../../context/AppContext';
 import REWARDS from '../../data/rewards';
 import { motion } from 'framer-motion';
+import { 
+  Trophy, Palette, User, 
+  Star, Flame, Brain, Zap, Award, 
+  Leaf, Moon, Bot, Sparkles, Lock 
+} from 'lucide-react';
+
+const iconMap = {
+  star: Star,
+  flame: Flame,
+  brain: Brain,
+  zap: Zap,
+  award: Award,
+  trophy: Trophy,
+  palette: Palette,
+  leaf: Leaf,
+  moon: Moon,
+  bot: Bot,
+  sparkles: Sparkles,
+};
 
 export default function Rewards() {
   const { state, unlockReward, addToast } = useApp();
 
-  const handleUnlock = (id: string, cost: number, title: string) => {
+  const handleUnlock = (id: string, cost: number, title: string, category: string) => {
+    if (category === 'badge') return; // Badges unlock automatically
     if (state.tokens < cost) return;
     unlockReward(id, cost);
     addToast(`Unlocked "${title}"`);
   };
 
+  const groups = [
+    { id: 'badge', title: 'Achievement Badges', icon: Trophy },
+    { id: 'theme', title: 'Color Themes', icon: Palette },
+    { id: 'skin', title: 'Avatar Skins', icon: User },
+  ];
+
   return (
-    <section id="view-rewards">
-      <div className="app-head">
-        <div>
-          <div className="eyebrow2">Spend what you earn</div>
-          <h1>Rewards</h1>
-        </div>
-        <div className="stat-pill">{'\u{1FA99}'} {state.tokens} tokens</div>
+    <section id="view-rewards" className="mx-auto max-w-[1080px] px-8 py-10 pb-20">
+      <div className="mb-12">
+        <h1 className="text-4xl font-bold tracking-tight text-[var(--text)] mb-3">Rewards</h1>
+        <p className="text-lg text-[var(--text-dim)]">
+          Unlock rewards by completing tasks and earning points. <span className="text-[var(--accent)] font-medium">You have {state.tokens} points.</span>
+        </p>
       </div>
-      <div className="reward-grid">
-        {REWARDS.map((r, i) => {
-          const unlocked = !!state.unlocked[r.id];
-          const canAfford = state.tokens >= r.cost;
+
+      <div className="flex flex-col gap-16">
+        {groups.map((group) => {
+          const items = REWARDS.filter(r => r.category === group.id);
+          const GroupIcon = group.icon;
+
           return (
-            <motion.div 
-              className={`reward-card${unlocked ? ' unlocked' : ''}`} 
-              key={r.id}
-              initial={{ opacity: 0, scale: 0.95, y: 10 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              transition={{ delay: i * 0.05 + 0.1 }}
-            >
-              <div className="re">{r.icon}</div>
-              <h4>{r.title}</h4>
-              <p>{r.desc}</p>
-              <div className="cost">{unlocked ? ' Unlocked' : `${r.cost} \u{1FA99}`}</div>
-              {!unlocked && (
-                <motion.button
-                  whileHover={canAfford ? { scale: 1.05 } : {}}
-                  whileTap={canAfford ? { scale: 0.95 } : {}}
-                  className={`btn-small${canAfford ? ' solid' : ''}`}
-                  disabled={!canAfford}
-                  onClick={() => handleUnlock(r.id, r.cost, r.title)}
-                >
-                  {canAfford ? 'Unlock' : 'Need more tokens'}
-                </motion.button>
-              )}
-            </motion.div>
+            <div key={group.id}>
+              <div className="flex items-center gap-3 mb-6">
+                <GroupIcon className="text-[var(--text)]" size={26} strokeWidth={2.5} />
+                <h2 className="text-2xl font-bold text-[var(--text)]">{group.title}</h2>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {items.map((r, i) => {
+                  const isUnlocked = r.category === 'badge' ? state.tokens >= r.cost : !!state.unlocked[r.id];
+                  const canAfford = state.tokens >= r.cost;
+                  const isClickable = !isUnlocked && r.category !== 'badge' && canAfford;
+                  const Icon = iconMap[r.icon as keyof typeof iconMap];
+
+                  return (
+                    <motion.div
+                      key={r.id}
+                      initial={{ opacity: 0, y: 15 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: i * 0.05 }}
+                      onClick={() => isClickable && handleUnlock(r.id, r.cost, r.title, r.category)}
+                      className={`relative rounded-2xl p-6 transition-all ${
+                        isUnlocked
+                          ? 'border border-[var(--accent)] bg-[var(--bg-elev)] shadow-sm'
+                          : 'border border-[var(--border)] bg-transparent opacity-80'
+                      } ${isClickable ? 'cursor-pointer hover:opacity-100 hover:border-orange-300 dark:hover:border-orange-800' : ''}`}
+                    >
+                      {/* Top Right Status */}
+                      <div className="absolute top-5 right-5">
+                        {isUnlocked ? (
+                          <div className="h-2.5 w-2.5 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.4)]"></div>
+                        ) : (
+                          <Lock size={16} className="text-[var(--text-faint)]" />
+                        )}
+                      </div>
+
+                      {/* Icon Circle */}
+                      <div className={`mb-4 inline-flex h-14 w-14 items-center justify-center rounded-full ${
+                        isUnlocked
+                          ? 'bg-orange-100 dark:bg-orange-950/30 text-[var(--accent)]'
+                          : 'bg-[var(--bg-elev-2)] text-[var(--text-faint)]'
+                      }`}>
+                        {Icon && <Icon size={26} strokeWidth={2.5} />}
+                      </div>
+
+                      {/* Content */}
+                      <h3 className={`mb-2 text-[18px] font-bold ${isUnlocked ? 'text-[var(--text)]' : 'text-[var(--text-dim)]'}`}>
+                        {r.title}
+                      </h3>
+                      <p className={`text-[14.5px] leading-relaxed mb-8 ${isUnlocked ? 'text-[var(--text-dim)] font-medium' : 'text-[var(--text-faint)]'}`}>
+                        {r.desc}
+                      </p>
+
+                      {/* Bottom Price / Status */}
+                      <div className="mt-auto font-bold text-[15px]">
+                        {isUnlocked ? (
+                          <span className="text-green-600 dark:text-green-500">Unlocked</span>
+                        ) : (
+                          <span className="text-[var(--text-faint)]">{r.cost} pts</span>
+                        )}
+                      </div>
+                    </motion.div>
+                  );
+                })}
+              </div>
+            </div>
           );
         })}
       </div>

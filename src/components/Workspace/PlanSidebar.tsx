@@ -128,7 +128,7 @@ export default function PlanSidebar() {
                               <div>
                                 <div className="ttitle">{t.title}</div>
                                 <div className={`diff-tag diff-${t.diff}`} style={{ marginTop: '4px' }}>
-                                  {t.diff} \u00B7 {t.tokens} {'\u{1FA99}'}
+                                  {t.diff} &middot; {t.tokens} {'\u{1FA99}'}
                                 </div>
                               </div>
                             </div>

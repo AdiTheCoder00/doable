@@ -75,6 +75,7 @@ export default function Hero() {
             whileHover={{ scale: 1.04 }}
             whileTap={{ scale: 0.96 }}
             className="btn-primary"
+            style={{ padding: '0 24px', height: '52px' }}
             onClick={enterApp}
           >
             Start a Task <ArrowRight size={18} />

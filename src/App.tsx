@@ -5,6 +5,7 @@ import Landing from './components/Landing/Landing';
 import Dashboard from './components/Dashboard/Dashboard';
 import Workspace from './components/Workspace/Workspace';
 import Rewards from './components/Rewards/Rewards';
+import History from './components/History/History';
 import ProofModal from './components/ProofModal';
 import Toast from './components/Toast';
 
@@ -24,6 +25,7 @@ function AppContent() {
           {state.view === 'dashboard' && <Dashboard />}
           {state.view === 'workspace' && <Workspace />}
           {state.view === 'rewards' && <Rewards />}
+          {state.view === 'history' && <History />}
         </div>
       )}
       {state.pendingTask && state.roadmap && <ProofModal />}

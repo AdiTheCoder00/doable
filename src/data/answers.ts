@@ -24,6 +24,7 @@ export function pickTemplate(text: string): string {
   const KEYWORD_MAP: [string[], string][] = [
     [['hackathon'], 'hackathon'],
     [['resume', 'cv'], 'resume'],
+    [['cover letter', 'coverletter', 'marketing internship'], 'cover_letter'],
     [['interview'], 'interview'],
     [['dsa', 'leetcode', 'algorithm', 'data structure'], 'coding'],
     [['gym', 'fitness', 'workout', 'exercise'], 'fitness'],
@@ -45,8 +46,8 @@ export function buildRoadmapFromTemplate(templateKey: string, seriousness: 'curi
   const cap = SERIOUSNESS_MILESTONES[seriousness];
   const milestones = tmpl.milestones.slice(0, cap).map((m) => ({
     title: m.title,
-    tasks: m.tasks.map((t) => ({ title: t.title, diff: t.diff, tokens: t.tokens, done: false })),
+    tasks: m.tasks.map((t) => ({ title: t.title, diff: t.diff, description: t.description, tokens: t.tokens, done: false })),
   }));
   const title = templateKey === 'generic' ? question.charAt(0).toUpperCase() + question.slice(1) : tmpl.title;
-  return { title, milestones };
+  return { id: Date.now().toString(), title, milestones };
 }

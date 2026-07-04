@@ -31,7 +31,9 @@ type Action =
   | { type: 'CLOSE_MODAL' }
   | { type: 'UNLOCK_REWARD'; id: string; cost: number }
   | { type: 'ADD_TOAST'; message: string }
-  | { type: 'REMOVE_TOAST' };
+  | { type: 'REMOVE_TOAST' }
+  | { type: 'CLEAR_ROADMAP' }
+  | { type: 'RESUME_TASK'; id: string };
 
 function reducer(state: AppState, action: Action): AppState {
   switch (action.type) {
@@ -71,7 +73,7 @@ function reducer(state: AppState, action: Action): AppState {
         ...state,
         chatLog: state.chatLog.map((e) => (e.id === action.id ? { ...e, decided: 'no' } : e)),
         recent: [
-          { title: entry?.question ?? '', date: new Date().toLocaleDateString(), done: false, chatOnly: true },
+          { id: Date.now().toString(), title: entry?.question ?? '', date: new Date().toLocaleDateString(), done: false, chatOnly: true },
           ...state.recent,
         ],
       };
@@ -85,14 +87,22 @@ function reducer(state: AppState, action: Action): AppState {
         ...state,
         chatLog: state.chatLog.map((e) => (e.id === action.id ? { ...e, decided: 'roadmap' } : e)),
         roadmap,
-        recent: [{ title: roadmap.title, date: new Date().toLocaleDateString(), done: false }, ...state.recent],
+        recent: [{ 
+          id: roadmap.id,
+          title: roadmap.title, 
+          date: new Date().toLocaleDateString(), 
+          done: false,
+          completedSteps: 0,
+          totalSteps: roadmap.milestones.reduce((acc, m) => acc + m.tasks.length, 0),
+          roadmap
+        }, ...state.recent],
       };
     }
     case 'OPEN_PROOF_MODAL':
       return { ...state, pendingTask: action.pendingTask };
     case 'COMPLETE_TASK': {
-      const { mIdx, tIdx } = action.pendingTask;
-      if (!state.roadmap) return state;
+      const { mIdx, tIdx } = action.pendingTask || state.pendingTask || { mIdx: -1, tIdx: -1 };
+      if (mIdx === -1 || !state.roadmap) return state;
       const task = state.roadmap.milestones[mIdx]?.tasks[tIdx];
       if (!task) return state;
       const newRoadmap = {
@@ -104,9 +114,15 @@ function reducer(state: AppState, action: Action): AppState {
         ),
       };
       const allDone = newRoadmap.milestones.every((m) => m.tasks.every((t) => t.done));
-      const newRecent = state.recent.length > 0
-        ? [{ ...state.recent[0], done: allDone }, ...state.recent.slice(1)]
-        : state.recent;
+      const completedSteps = newRoadmap.milestones.reduce((acc, m) => acc + m.tasks.filter(t => t.done).length, 0);
+      const totalSteps = newRoadmap.milestones.reduce((acc, m) => acc + m.tasks.length, 0);
+      
+      const newRecent = state.recent.map(r => 
+        r.id === newRoadmap.id 
+          ? { ...r, done: allDone, completedSteps, totalSteps, roadmap: newRoadmap } 
+          : r
+      );
+      
       return {
         ...state,
         roadmap: newRoadmap,
@@ -127,6 +143,18 @@ function reducer(state: AppState, action: Action): AppState {
       return { ...state, toasts: [...state.toasts, action.message] };
     case 'REMOVE_TOAST':
       return { ...state, toasts: state.toasts.slice(1) };
+    case 'CLEAR_ROADMAP':
+      return { ...state, roadmap: null, chatLog: [], pendingTask: null };
+    case 'RESUME_TASK': {
+      const task = state.recent.find(r => r.id === action.id);
+      if (!task || !task.roadmap) return state;
+      return {
+        ...state,
+        roadmap: task.roadmap,
+        chatLog: [], // Clear chat log when resuming an old task, or restore if we saved it (but we didn't)
+        view: 'workspace',
+      };
+    }
     default:
       return state;
   }
@@ -140,7 +168,7 @@ interface AppContextType {
   decideNo: (id: number) => void;
   setSeriousness: (id: number, seriousness: Seriousness) => void;
   openProofModal: (mIdx: number, tIdx: number) => void;
-  completeTask: () => void;
+  completeTask: (task?: PendingTask) => void;
   closeModal: () => void;
   unlockReward: (id: string, cost: number) => void;
   addToast: (msg: string) => void;
@@ -148,6 +176,8 @@ interface AppContextType {
   exitApp: () => void;
   setView: (view: View) => void;
   setTheme: (theme: Theme) => void;
+  clearRoadmap: () => void;
+  resumeTask: (id: string) => void;
 }
 
 const AppContext = createContext<AppContextType | null>(null);
@@ -206,8 +236,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
     dispatch({ type: 'OPEN_PROOF_MODAL', pendingTask: { mIdx, tIdx } });
   }, []);
 
-  const completeTask = useCallback(() => {
-    if (state.pendingTask) {
+  const completeTask = useCallback((task?: PendingTask) => {
+    if (task) {
+      dispatch({ type: 'COMPLETE_TASK', pendingTask: task });
+    } else if (state.pendingTask) {
       dispatch({ type: 'COMPLETE_TASK', pendingTask: state.pendingTask });
     }
   }, [state.pendingTask]);
@@ -223,6 +255,14 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const addToast = useCallback((msg: string) => {
     dispatch({ type: 'ADD_TOAST', message: msg });
     setTimeout(() => dispatch({ type: 'REMOVE_TOAST' }), 2600);
+  }, []);
+
+  const clearRoadmap = useCallback(() => {
+    dispatch({ type: 'CLEAR_ROADMAP' });
+  }, []);
+
+  const resumeTask = useCallback((id: string) => {
+    dispatch({ type: 'RESUME_TASK', id });
   }, []);
 
   return (
@@ -243,6 +283,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
         exitApp,
         setView,
         setTheme,
+        clearRoadmap,
+        resumeTask,
       }}
     >
       {children}

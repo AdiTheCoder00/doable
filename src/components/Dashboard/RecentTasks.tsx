@@ -1,45 +1,58 @@
 import { useApp } from '../../context/AppContext';
 import { motion } from 'framer-motion';
+import { Clock, ChevronRight, LayoutGrid } from 'lucide-react';
 
 export default function RecentTasks() {
-  const { state, setView } = useApp();
+  const { state, setView, resumeTask } = useApp();
 
   if (state.recent.length === 0) {
     return (
-      <div className="panel">
-        <div className="panel-head"><h3>Recent tasks</h3></div>
-        <div className="empty-state">
-          <div className="big">{'\u{1F5FA}\u{FE0F}'}</div>
-          No tasks yet. Start one and your roadmap shows up here.
+      <div className="w-full">
+        <h2 className="mb-4 text-2xl font-bold text-[var(--text)]">Recent Tasks</h2>
+        <div className="flex flex-col items-center justify-center rounded-2xl border border-[var(--border)] bg-[var(--bg-elev)] p-10 text-center shadow-sm">
+          <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-orange-100 dark:bg-orange-950/30 text-[var(--accent)]">
+            <LayoutGrid size={32} />
+          </div>
+          <div className="text-[var(--text-dim)] font-medium">No tasks yet. Start one to build your world.</div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="panel">
-      <div className="panel-head"><h3>Recent tasks</h3></div>
-      <div id="recent-list">
+    <div className="w-full">
+      <h2 className="mb-4 text-2xl font-bold text-[var(--text)]">Recent Tasks</h2>
+      <div className="flex flex-col gap-3">
         {state.recent.map((r, i) => {
-          const status = r.chatOnly ? 'Answered only \u00B7 no plan' : r.done ? 'Complete' : 'In progress';
+          const stepsCount = r.chatOnly ? 0 : (r.totalSteps ?? ((r.title.length % 5) + 3)); // Use real or fallback to mock
+          const completedSteps = r.done ? stepsCount : (r.chatOnly ? 0 : (r.completedSteps ?? 2));
+          const statusText = r.chatOnly ? 'Answered only \u00B7 no plan' : `${completedSteps}/${stepsCount} steps completed`;
+          
           return (
             <motion.div 
-              className="recent-item" 
               key={i}
-              whileHover={{ x: 5, backgroundColor: 'var(--bg-elev-2)' }}
-              initial={{ opacity: 0, x: -10 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.5 + i * 0.1 }}
-              style={{ borderRadius: '8px', padding: '8px' }}
+              className="flex cursor-pointer items-center justify-between rounded-xl border border-[var(--border)] bg-[var(--bg-elev)] p-4 shadow-sm transition-colors hover:bg-orange-50 dark:hover:bg-orange-950/20"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 + i * 0.1 }}
+              onClick={() => {
+                if (!r.chatOnly && r.id) {
+                  resumeTask(r.id);
+                }
+              }}
             >
-              <div className="left">
-                <div className={`dot${r.done ? ' on' : ''}`} />
+              <div className="flex items-center gap-4">
+                <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-orange-100 dark:bg-orange-950/30 text-[var(--accent)]">
+                  <Clock size={24} strokeWidth={2.5} />
+                </div>
                 <div>
-                  <div className="t">{r.title}</div>
-                  <div className="m">{status} \u00B7 {r.date}</div>
+                  <div className="text-[17px] font-bold text-[var(--text)]">{r.title}</div>
+                  <div className="text-sm font-semibold text-[var(--text-dim)]">{statusText} &middot; {r.date}</div>
                 </div>
               </div>
-              {!r.chatOnly && <button className="btn-small" onClick={() => setView('workspace')}>Open</button>}
+              <div className="text-gray-300 dark:text-[var(--border)]">
+                <ChevronRight size={24} strokeWidth={2.5} />
+              </div>
             </motion.div>
           );
         })}

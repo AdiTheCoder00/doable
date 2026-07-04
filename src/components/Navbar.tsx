@@ -1,5 +1,6 @@
 import { useApp } from '../context/AppContext';
 import logo from '../assets/logo.png';
+import { LayoutGrid, Plus, Book, Gift, Flame, Bell, Moon, Sun, Check } from 'lucide-react';
 
 export default function Navbar() {
   const { state, setView, enterApp, exitApp, setTheme } = useApp();
@@ -9,39 +10,66 @@ export default function Navbar() {
   };
 
   return (
-    <nav id="mainnav">
-      <div className="brand" onClick={exitApp} style={{ cursor: 'pointer' }} role="button" tabIndex={0}>
-        <img src={logo} alt="Doable" style={{ height: '48px', width: 'auto', objectFit: 'contain' }} />
+    <nav className="sticky top-0 z-40 flex items-center justify-between border-b border-[var(--border)] bg-[var(--bg-elev)] px-8 py-4">
+      {/* Left: Logo */}
+      <div className="brand flex items-center cursor-pointer" onClick={exitApp} role="button" tabIndex={0}>
+        <span className="shiny-logo">Doable.</span>
       </div>
 
+      {/* Center: Nav Pills */}
       {state.inApp && (
-        <div className="navlinks" id="navlinks-app">
-          {(['dashboard', 'workspace', 'rewards'] as const).map((v) => (
-            <a
-              key={v}
-              className={`navlink${state.view === v ? ' active' : ''}`}
-              onClick={() => setView(v)}
-            >
-              {v === 'dashboard' ? 'Home' : v === 'workspace' ? 'Ask & Plan' : 'Rewards'}
-            </a>
-          ))}
+        <div className="flex items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--bg-elev)] p-1.5 shadow-sm">
+          <button 
+            className={`flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition-colors ${state.view === 'dashboard' ? 'bg-[var(--accent)] text-white' : 'text-[var(--text-dim)] hover:bg-[var(--bg-elev-2)]'}`}
+            onClick={() => setView('dashboard')}
+          >
+            <LayoutGrid size={18} /> Home
+          </button>
+          <button 
+            className={`flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition-colors ${state.view === 'workspace' ? 'bg-[var(--accent)] text-white' : 'text-[var(--text-dim)] hover:bg-[var(--bg-elev-2)]'}`}
+            onClick={() => setView('workspace')}
+          >
+            <Plus size={18} /> New Task
+          </button>
+          <button 
+            className={`flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition-colors ${state.view === 'history' ? 'bg-[var(--accent)] text-white' : 'text-[var(--text-dim)] hover:bg-[var(--bg-elev-2)]'}`}
+            onClick={() => setView('history')}
+          >
+            <Book size={18} /> History
+          </button>
+          <button 
+            className={`flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition-colors ${state.view === 'rewards' ? 'bg-[var(--accent)] text-white' : 'text-[var(--text-dim)] hover:bg-[var(--bg-elev-2)]'}`}
+            onClick={() => setView('rewards')}
+          >
+            <Gift size={18} /> Rewards
+          </button>
         </div>
       )}
 
-      <div className="navright">
+      {/* Right: Actions */}
+      <div className="flex items-center gap-4">
         {state.inApp && (
-          <span className="stat-pill" id="navlinks-app-pill">
-            {'\u{1F525}'} {state.streak} &middot; {'\u{1FA99}'} {state.tokens}
-          </span>
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 rounded-full bg-orange-100 px-3 py-1.5 font-bold text-orange-600 dark:bg-orange-950 dark:text-orange-500">
+              <Flame size={16} fill="currentColor" />
+              <span>{state.streak} days</span>
+            </div>
+            <div className="font-bold text-[var(--accent)] text-[17px]">
+              {state.tokens} pts
+            </div>
+          </div>
         )}
         {!state.inApp && (
-          <button className="btn-primary" style={{ padding: '9px 18px', fontSize: '14px' }} onClick={enterApp}>
+          <button className="btn-primary" style={{ padding: '6px 16px', height: '38px', fontSize: '14px' }} onClick={enterApp}>
             Get Started
           </button>
         )}
-        <button className="theme-toggle" onClick={toggleTheme} aria-label="Toggle dark mode">
-          {state.theme === 'dark' ? '\u{1F319}' : '\u{2600}\u{FE0F}'}
-        </button>
+        <div className="flex items-center gap-2 border-l border-[var(--border)] pl-4">
+
+          <button className="flex h-10 w-10 items-center justify-center rounded-full text-[var(--text-dim)] hover:bg-[var(--bg-elev-2)] hover:text-[var(--text)] transition-colors" onClick={toggleTheme}>
+            {state.theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+          </button>
+        </div>
       </div>
     </nav>
   );

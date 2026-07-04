@@ -7,8 +7,8 @@ function t(diff: Diff): number {
   return DIFF_TOKENS[diff];
 }
 
-function task(title: string, diff: Diff) {
-  return { title, diff, tokens: t(diff), done: false };
+function task(title: string, diff: Diff, description?: string) {
+  return { title, diff, description, tokens: t(diff), done: false };
 }
 
 interface Template {
@@ -61,6 +61,21 @@ const TEMPLATES: Record<string, Template> = {
         ],
       },
     ],
+  },
+  cover_letter: {
+    title: 'Write a cover letter for a marketing internship',
+    milestones: [
+      {
+        title: 'Complete your cover letter',
+        tasks: [
+          task('Analyze the Job Description', 'easy', 'Highlight the three most critical marketing skills or tools mentioned in the job posting and write them down.'),
+          task('Outline Your Professional Value', 'medium', 'Draft three bullet points describing specific marketing projects or academic successes that prove you have the skills identified.'),
+          task('Draft the Full Cover Letter', 'medium', 'Write a four-paragraph draft including your introduction, the value you offer, why you want to work there, and a call to action.'),
+          task('Proofread and Peer Review', 'easy', 'Run your draft through a grammar checker and have one peer or mentor provide feedback on the tone.'),
+          task('Final Formatting and PDF Export', 'easy', 'Adjust the layout to a professional template and save the final version as a PDF named with your full name.')
+        ]
+      }
+    ]
   },
   resume: {
     title: 'Write a strong resume',

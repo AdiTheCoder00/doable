@@ -1,10 +1,11 @@
 export type Theme = 'dark' | 'light';
 export type Seriousness = 'curious' | 'learn' | 'master';
 export type Diff = 'easy' | 'medium' | 'hard';
-export type View = 'dashboard' | 'workspace' | 'rewards';
+export type View = 'dashboard' | 'workspace' | 'rewards' | 'history';
 
 export interface Task {
   title: string;
+  description?: string;
   diff: Diff;
   tokens: number;
   done: boolean;
@@ -16,15 +17,20 @@ export interface Milestone {
 }
 
 export interface Roadmap {
+  id: string;
   title: string;
   milestones: Milestone[];
 }
 
 export interface RecentItem {
+  id: string;
   title: string;
   date: string;
   done: boolean;
   chatOnly?: boolean;
+  completedSteps?: number;
+  totalSteps?: number;
+  roadmap?: Roadmap;
 }
 
 export interface ChatEntry {
@@ -39,6 +45,7 @@ export interface ChatEntry {
 
 export interface Reward {
   id: string;
+  category: 'badge' | 'theme' | 'skin';
   icon: string;
   title: string;
   desc: string;
