@@ -30,8 +30,8 @@ export default function Hero() {
           speed={0.5}
           squareSize={56}
           direction="diagonal"
-          borderColor="rgba(255, 122, 26, 0.08)"
-          hoverFillColor="rgba(255,122,26,0.15)"
+          borderColor="rgba(255, 122, 26, 0.04)"
+          hoverFillColor="rgba(255,122,26,0.08)"
           shape="square"
           hoverTrailAmount={5}
         />
@@ -52,22 +52,24 @@ export default function Hero() {
           }}
         >
           <Zap size={16} color="#FF7A1A" fill="#FF7A1A" />
-          ⚡ AI that holds you accountable — not AI that does the work
+          AI that holds you accountable — not AI that does the work
         </motion.span>
 
         <motion.h1
           variants={fadeUp}
-          className="hero-h1 mx-auto mb-5 text-[color:var(--text)]"
+          className="hero-h1 mx-auto mb-8 text-[color:var(--text)]"
+          style={{ lineHeight: 1.1 }}
         >
           AI that won't do your <br />
-          <span style={{ color: 'var(--accent)' }}>WORK FOR<br/>YOU.</span>
+          <span style={{ color: 'var(--accent)' }}>work for you</span>
         </motion.h1>
 
         <motion.p
           variants={fadeUp}
-          className="hero-p mx-auto mb-9 text-[color:var(--text-dim)]"
+          className="hero-p mx-auto mb-6 text-[color:var(--text-dim)] max-w-[640px]"
+          style={{ lineHeight: 1.5 }}
         >
-          Get guided, prove you did it, build a track record you can actually trust — no plagiarism checker required.
+          Get guided, prove you did the work, and build a track record you can trust.
         </motion.p>
 
         <motion.div variants={fadeUp} className="flex flex-col items-center justify-center">

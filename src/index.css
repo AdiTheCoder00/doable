@@ -55,6 +55,9 @@ html, body {
   margin: 0;
   padding: 0;
 }
+body:has(#view-landing) {
+  overflow: hidden;
+}
 #root {
   background: var(--bg);
   color: var(--text);
@@ -257,8 +260,10 @@ nav .stat-pill {
 /* landing */
 #view-landing {
   position: relative;
-  height: calc(100vh - 73px);
+  height: 100vh;
+  margin-top: -73px;
   background: var(--grad-hero);
+  overflow: hidden;
 }
 #view-landing .hero {
   position: absolute;
