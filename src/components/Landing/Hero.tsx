@@ -1,5 +1,6 @@
 import { motion, type Variants } from 'framer-motion';
 import { useApp } from '../../context/AppContext';
+import ShapeGrid from '../ShapeGrid/ShapeGrid';
 
 const container: Variants = {
   hidden: {},
@@ -23,6 +24,17 @@ export default function Hero() {
 
   return (
     <div className="hero">
+      <div className="hero-bg">
+        <ShapeGrid
+          speed={0.5}
+          squareSize={40}
+          direction="diagonal"
+          borderColor="var(--border)"
+          hoverFillColor="var(--accent)"
+          shape="square"
+          hoverTrailAmount={5}
+        />
+      </div>
       <motion.div
         className="relative z-10 mx-auto flex max-w-4xl flex-col items-center justify-center px-6 text-center"
         variants={container}
