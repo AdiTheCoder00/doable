@@ -1,5 +1,10 @@
 import { useApp } from '../context/AppContext';
 
+const links = [
+  { label: 'Features', href: '#features' },
+  { label: 'How it works', href: '#how-it-works' },
+];
+
 export default function Navbar() {
   const { state, setView, enterApp, setTheme } = useApp();
 
@@ -10,8 +15,23 @@ export default function Navbar() {
   return (
     <nav id="mainnav">
       <div className="brand">
-        <span className="mark"></span> Doable.
+        <span className="mark">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="2,8 6,12 14,4" />
+          </svg>
+        </span>
+        Doable.
       </div>
+
+      {!state.inApp && (
+        <div className="navlinks">
+          {links.map((l) => (
+            <a key={l.label} className="navlink" href={l.href} onClick={(e) => { e.preventDefault(); enterApp(); }}>
+              {l.label}
+            </a>
+          ))}
+        </div>
+      )}
 
       {state.inApp && (
         <div className="navlinks" id="navlinks-app">
@@ -34,8 +54,8 @@ export default function Navbar() {
           </span>
         )}
         {!state.inApp && (
-          <button className="btn-ghost" style={{ padding: '9px 16px', fontSize: '14px' }} onClick={enterApp}>
-            Dashboard
+          <button className="btn-primary" style={{ padding: '9px 18px', fontSize: '14px' }} onClick={enterApp}>
+            Get Started
           </button>
         )}
         <button className="theme-toggle" onClick={toggleTheme} aria-label="Toggle dark mode">
