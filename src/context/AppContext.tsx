@@ -10,6 +10,7 @@ const initialState: AppState = {
   view: 'dashboard',
   roadmap: null,
   recent: [],
+  unlocked: {},
   chatLog: [],
   pendingTask: null,
   toasts: [],
