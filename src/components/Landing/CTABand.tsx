@@ -5,7 +5,7 @@ export default function CTABand() {
   return (
     <div className="cta-band">
       <h2>Ready to keep yourself honest?</h2>
-      <button className="btn-primary" onClick={enterApp}>Start a Task \u2192</button>
+      <button className="btn-primary" onClick={enterApp}>Start a Task </button>
     </div>
   );
 }

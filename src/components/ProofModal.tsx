@@ -60,7 +60,7 @@ export default function ProofModal() {
             <div className="verify-check">{'\u2705'}</div>
             <h3>Verified</h3>
             <div className="token-pop">+{task.tokens} {'\u{1FA99}'}</div>
-            <p className="desc">Nice work \u2014 next step unlocked.</p>
+            <p className="desc">Nice work  next step unlocked.</p>
             <div className="modal-actions">
               <button className="btn-primary" onClick={() => { setStep('upload'); setFileName(''); closeModal(); }}>
                 Keep going

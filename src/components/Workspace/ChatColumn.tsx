@@ -21,14 +21,14 @@ export default function ChatColumn() {
     <div className="chat-col">
       <div className="goal-box" id="ask-block" style={{ marginTop: 0 }}>
         <h1 id="ask-heading">What do you want to know?</h1>
-        <p>Ask it like you'd ask any AI. You'll get a real answer first \u2014 the plan is optional.</p>
+        <p>Ask it like you'd ask any AI. You'll get a real answer first  the plan is optional.</p>
         <textarea
           id="goal-input"
           placeholder="e.g. How do I get started with Python basics?"
           value={input}
           onChange={(e) => setInput(e.target.value)}
         />
-        <button className="btn-primary" id="ask-btn" onClick={handleAsk}>Ask Doable \u2192</button>
+        <button className="btn-primary" id="ask-btn" onClick={handleAsk}>Ask Doable </button>
         <div className="chip-examples">
           {[
             ['How do I get started with Python basics?', 'python basics'],

@@ -37,7 +37,7 @@ export default function ChatEntry({ entry }: Props) {
             <div className="followup-inline">
               <h3 style={{ fontSize: '16px', margin: '0 0 8px' }}>Want to actually go do this?</h3>
               <p style={{ color: 'var(--text-dim)', fontSize: '14px', margin: '0 0 14px' }}>
-                Turn this into small steps you complete for real \u2014 with proof and tokens along the way.
+                Turn this into small steps you complete for real  with proof and tokens along the way.
               </p>
               <div className="seriousness" id={`ser-${entry.id}`}>
                 {(['curious', 'learn', 'master'] as Seriousness[]).map((level) => (
@@ -59,7 +59,7 @@ export default function ChatEntry({ entry }: Props) {
                   style={{ flex: '1', justifyContent: 'center', padding: '12px' }}
                   onClick={() => decideYes(entry.id, entry.seriousness)}
                 >
-                  Yes, build my roadmap \u2192
+                  Yes, build my roadmap 
                 </button>
                 <button className="btn-ghost" style={{ padding: '11px 18px' }} onClick={() => decideNo(entry.id)}>
                   No, that's all
@@ -69,10 +69,10 @@ export default function ChatEntry({ entry }: Props) {
           )}
 
           {entry.decided === 'roadmap' && (
-            <div className="decided-tag">{'\u2705'} Turned into a roadmap \u2014 check the plan on the right</div>
+            <div className="decided-tag">{'\u2705'} Turned into a roadmap  check the plan on the right</div>
           )}
           {entry.decided === 'no' && (
-            <div className="decided-tag">Saved as answer only \u2014 no plan started</div>
+            <div className="decided-tag">Saved as answer only  no plan started</div>
           )}
         </>
       )}

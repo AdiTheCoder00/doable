@@ -28,7 +28,7 @@ export default function Rewards() {
               <div className="re">{r.icon}</div>
               <h4>{r.title}</h4>
               <p>{r.desc}</p>
-              <div className="cost">{unlocked ? '\u2713 Unlocked' : `${r.cost} \u{1FA99}`}</div>
+              <div className="cost">{unlocked ? ' Unlocked' : `${r.cost} \u{1FA99}`}</div>
               {!unlocked && (
                 <button
                   className={`btn-small${canAfford ? ' solid' : ''}`}

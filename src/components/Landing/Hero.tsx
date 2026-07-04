@@ -35,10 +35,10 @@ export default function Hero() {
           AI that will <br /><span className="hl">HELP YOU MASTER TOPICS.</span>
         </h1>
         <p className="sub">
-          Ask your question, get a real roadmap, and actually finish it. Upload proof, earn tokens, watch your island grow \u2014 no plagiarism checker required.
+          Ask your question, get a real roadmap, and actually finish it. Upload proof, earn tokens, watch your island grow  no plagiarism checker required.
         </p>
         <div className="hero-ctas">
-          <button className="btn-primary" onClick={enterApp}>Start a Task \u2192</button>
+          <button className="btn-primary" onClick={enterApp}>Start a Task </button>
         </div>
       </div>
     </div>

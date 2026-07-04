@@ -36,7 +36,7 @@ export default function PlanSidebar() {
           <div id="sidebar-body">
             <div className="empty-state" style={{ padding: '30px 10px' }}>
               <div className="big">{'\u{1F9ED}'}</div>
-              Ask something on the left. If you choose to build a roadmap, it shows up here \u2014 right next to the chat, so you can mark steps done as you go.
+              Ask something on the left. If you choose to build a roadmap, it shows up here  right next to the chat, so you can mark steps done as you go.
             </div>
           </div>
         </div>
@@ -64,7 +64,7 @@ export default function PlanSidebar() {
             {state.roadmap.milestones.map((m, mIdx) => {
               const mstate = milestoneState(state.roadmap!, mIdx);
               const doneCount = m.tasks.filter((t) => t.done).length;
-              const icon = mstate === 'done' ? '\u2713' : (mIdx + 1).toString();
+              const icon = mstate === 'done' ? '' : (mIdx + 1).toString();
               const isOpen = openMilestone === mIdx && mstate !== 'locked';
 
               return (
@@ -85,7 +85,7 @@ export default function PlanSidebar() {
                       {m.tasks.map((t, tIdx) => {
                         const unlocked = taskUnlocked(state.roadmap!, mIdx, tIdx);
                         const doneClass = t.done ? 'done' : '';
-                        const checkContent = t.done ? '\u2713' : '';
+                        const checkContent = t.done ? '' : '';
                         let action: React.ReactNode;
                         if (t.done) {
                           action = <span className={`diff-tag diff-${t.diff}`}>+{t.tokens} {'\u{1FA99}'}</span>;

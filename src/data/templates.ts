@@ -49,7 +49,7 @@ const TEMPLATES: Record<string, Template> = {
         tasks: [
           task('Set up your repo and dev environment', 'medium'),
           task('Build a working core feature', 'hard'),
-          task('Cut scope \u2014 ship an MVP, not the dream version', 'hard'),
+          task('Cut scope  ship an MVP, not the dream version', 'hard'),
         ],
       },
       {
@@ -83,7 +83,7 @@ const TEMPLATES: Record<string, Template> = {
         title: 'Design & format',
         tasks: [
           task('Pick a clean one-page template', 'easy'),
-          task('Format consistently \u2014 fonts, spacing, dates', 'medium'),
+          task('Format consistently  fonts, spacing, dates', 'medium'),
         ],
       },
       {
@@ -228,7 +228,7 @@ const TEMPLATES: Record<string, Template> = {
       {
         title: 'See the shape of it',
         tasks: [
-          task("Find one beginner-level tutorial or doc page and skim only the headings \u2014 don't read the content yet", 'easy'),
+          task("Find one beginner-level tutorial or doc page and skim only the headings  don't read the content yet", 'easy'),
           task('Write down, in your own words, the 3 sub-topics that keep showing up', 'easy'),
         ],
       },

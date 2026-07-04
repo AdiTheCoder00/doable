@@ -10,7 +10,7 @@ export default function HowItWorks() {
         <div className="step-card">
           <div className="stepnum">01</div>
           <h3>Ask</h3>
-          <p>Tell Doable what you're trying to do \u2014 an assignment, a job app, a new skill. It answers like any AI would.</p>
+          <p>Tell Doable what you're trying to do  an assignment, a job app, a new skill. It answers like any AI would.</p>
         </div>
         <div className="step-card">
           <div className="stepnum">02</div>
@@ -20,12 +20,12 @@ export default function HowItWorks() {
         <div className="step-card">
           <div className="stepnum">03</div>
           <h3>Prove</h3>
-          <p>Snap a screenshot. AI checks it plausibly matches the step \u2014 tokens land, your streak holds, the next step unlocks.</p>
+          <p>Snap a screenshot. AI checks it plausibly matches the step  tokens land, your streak holds, the next step unlocks.</p>
         </div>
       </div>
       <div className="note-band">
         <h4>A note on what this actually is {'\u{1F44B}'}</h4>
-        <p>Proof of work today checks plausibility with AI \u2014 it's not tamper-proof. Think of it as building your own honest record over time, not a courtroom-grade audit.</p>
+        <p>Proof of work today checks plausibility with AI  it's not tamper-proof. Think of it as building your own honest record over time, not a courtroom-grade audit.</p>
       </div>
     </div>
   );

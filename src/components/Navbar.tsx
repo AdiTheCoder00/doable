@@ -10,7 +10,7 @@ export default function Navbar() {
   return (
     <nav id="mainnav">
       <div className="brand">
-        <span className="mark">\u2713</span> Doable.
+        <span className="mark"></span> Doable.
       </div>
 
       {state.inApp && (

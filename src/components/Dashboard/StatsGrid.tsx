@@ -27,7 +27,7 @@ export default function StatsGrid() {
       </div>
       <div className="stat-card">
         <div className="label">{'\u2705'} Progress</div>
-        <div className="value tasks">{total > 0 ? `${done} / ${total}` : '\u2014'}</div>
+        <div className="value tasks">{total > 0 ? `${done} / ${total}` : ''}</div>
         {total > 0 && <div className="bar"><i style={{ width: pct + '%' }} /></div>}
       </div>
     </div>

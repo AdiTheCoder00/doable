@@ -25,7 +25,7 @@ export default function WorldPanel() {
           ))}
         </div>
         {buildings.length === 0 && (
-          <div className="empty-msg">Empty island \u2014 finish a step to plant your first tree</div>
+          <div className="empty-msg">Empty island  finish a step to plant your first tree</div>
         )}
       </div>
     </div>
