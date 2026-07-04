@@ -3,7 +3,7 @@ import type { AppState, Theme, View, ChatEntry, Seriousness, PendingTask } from 
 import { pickTemplate, getAnswer, genericAnswer, buildRoadmapFromTemplate } from '../data/answers';
 
 const initialState: AppState = {
-  theme: 'dark',
+  theme: 'light',
   inApp: false,
   tokens: 0,
   streak: 0,
