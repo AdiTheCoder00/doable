@@ -5,12 +5,11 @@ import { pickTemplate, getAnswer, genericAnswer, buildRoadmapFromTemplate } from
 const initialState: AppState = {
   theme: 'light',
   inApp: false,
-  tokens: 0,
+  totalCompletedTasks: 0,
   streak: 0,
   view: 'dashboard',
   roadmap: null,
   recent: [],
-  unlocked: {},
   chatLog: [],
   pendingTask: null,
   toasts: [],
@@ -29,7 +28,6 @@ type Action =
   | { type: 'OPEN_PROOF_MODAL'; pendingTask: PendingTask }
   | { type: 'COMPLETE_TASK'; pendingTask: PendingTask }
   | { type: 'CLOSE_MODAL' }
-  | { type: 'UNLOCK_REWARD'; id: string; cost: number }
   | { type: 'ADD_TOAST'; message: string }
   | { type: 'REMOVE_TOAST' }
   | { type: 'CLEAR_ROADMAP' }
@@ -126,19 +124,13 @@ function reducer(state: AppState, action: Action): AppState {
       return {
         ...state,
         roadmap: newRoadmap,
-        tokens: state.tokens + task.tokens,
+        totalCompletedTasks: state.totalCompletedTasks + 1,
         pendingTask: null,
         recent: newRecent,
       };
     }
     case 'CLOSE_MODAL':
       return { ...state, pendingTask: null };
-    case 'UNLOCK_REWARD':
-      return {
-        ...state,
-        tokens: state.tokens - action.cost,
-        unlocked: { ...state.unlocked, [action.id]: true },
-      };
     case 'ADD_TOAST':
       return { ...state, toasts: [...state.toasts, action.message] };
     case 'REMOVE_TOAST':
@@ -170,7 +162,6 @@ interface AppContextType {
   openProofModal: (mIdx: number, tIdx: number) => void;
   completeTask: (task?: PendingTask) => void;
   closeModal: () => void;
-  unlockReward: (id: string, cost: number) => void;
   addToast: (msg: string) => void;
   enterApp: () => void;
   exitApp: () => void;
@@ -248,10 +239,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
     dispatch({ type: 'CLOSE_MODAL' });
   }, []);
 
-  const unlockReward = useCallback((id: string, cost: number) => {
-    dispatch({ type: 'UNLOCK_REWARD', id, cost });
-  }, []);
-
   const addToast = useCallback((msg: string) => {
     dispatch({ type: 'ADD_TOAST', message: msg });
     setTimeout(() => dispatch({ type: 'REMOVE_TOAST' }), 2600);
@@ -277,7 +264,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
         openProofModal,
         completeTask,
         closeModal,
-        unlockReward,
         addToast,
         enterApp,
         exitApp,

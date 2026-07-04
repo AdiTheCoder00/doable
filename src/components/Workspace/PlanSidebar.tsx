@@ -111,7 +111,7 @@ export default function PlanSidebar() {
                         const checkContent = t.done ? '' : '';
                         let action: React.ReactNode;
                         if (t.done) {
-                          action = <span className={`diff-tag diff-${t.diff}`}>+{t.tokens} {'\u{1FA99}'}</span>;
+                          action = <span className={`diff-tag diff-${t.diff}`}>Done</span>;
                         } else if (unlocked) {
                           action = (
                             <button className="btn-small solid" onClick={() => openProofModal(mIdx, tIdx)}>
@@ -128,7 +128,7 @@ export default function PlanSidebar() {
                               <div>
                                 <div className="ttitle">{t.title}</div>
                                 <div className={`diff-tag diff-${t.diff}`} style={{ marginTop: '4px' }}>
-                                  {t.diff} &middot; {t.tokens} {'\u{1FA99}'}
+                                  {t.diff}
                                 </div>
                               </div>
                             </div>

@@ -5,9 +5,7 @@ import { IsoHouse, IsoTree } from './IsometricElements';
 
 const World3D = lazy(() => import('./World3D'));
 
-function doneTasks(roadmap: NonNullable<ReturnType<typeof useApp>['state']['roadmap']>) {
-  return roadmap.milestones.reduce((s, m) => s + m.tasks.filter((t) => t.done).length, 0);
-}
+// Removed doneTasks function
 
 // Extract the fallback SVG into a component so we can use it cleanly
 const SvgFallback = ({ buildingsCount }: { buildingsCount: number }) => (
@@ -28,12 +26,10 @@ const SvgFallback = ({ buildingsCount }: { buildingsCount: number }) => (
 
 export default function WorldPanel() {
   const { state } = useApp();
-  const done = state.roadmap ? doneTasks(state.roadmap) : 0;
-
-  const buildingsCount = Math.min(done, 15);
+  const buildingsCount = state.totalCompletedTasks;
   
-  const levelThresholds = [0, 50, 150, 300, 600];
-  const currentLevelIdx = Math.max(0, levelThresholds.findIndex(t => state.tokens <= t) - 1);
+  const levelThresholds = [0, 5, 15, 30, 60];
+  const currentLevelIdx = Math.max(0, levelThresholds.findIndex(t => state.totalCompletedTasks <= t) - 1);
   const currentLevel = currentLevelIdx + 1;
 
   // Flatten tasks for labels

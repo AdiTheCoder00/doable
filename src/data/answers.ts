@@ -46,7 +46,7 @@ export function buildRoadmapFromTemplate(templateKey: string, seriousness: 'curi
   const cap = SERIOUSNESS_MILESTONES[seriousness];
   const milestones = tmpl.milestones.slice(0, cap).map((m) => ({
     title: m.title,
-    tasks: m.tasks.map((t) => ({ title: t.title, diff: t.diff, description: t.description, tokens: t.tokens, done: false })),
+    tasks: m.tasks.map((t) => ({ title: t.title, diff: t.diff, description: t.description, done: false })),
   }));
   const title = templateKey === 'generic' ? question.charAt(0).toUpperCase() + question.slice(1) : tmpl.title;
   return { id: Date.now().toString(), title, milestones };

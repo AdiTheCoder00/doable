@@ -54,9 +54,6 @@ export default function Navbar() {
               <Flame size={16} fill="currentColor" />
               <span>{state.streak} days</span>
             </div>
-            <div className="font-bold text-[var(--accent)] text-[17px]">
-              {state.tokens} pts
-            </div>
           </div>
         )}
         {!state.inApp && (

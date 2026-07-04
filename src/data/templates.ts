@@ -8,7 +8,7 @@ function t(diff: Diff): number {
 }
 
 function task(title: string, diff: Diff, description?: string) {
-  return { title, diff, description, tokens: t(diff), done: false };
+  return { title, diff, description, done: false };
 }
 
 interface Template {

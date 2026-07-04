@@ -14,16 +14,16 @@ export default function StatsStack() {
   const total = state.roadmap ? totalTasks(state.roadmap) : 0;
   const done = state.roadmap ? doneTasks(state.roadmap) : 0;
 
-  // Mock levels based on tokens
-  const levelThresholds = [0, 50, 150, 300, 600];
+  // Mock levels based on tasks
+  const levelThresholds = [0, 5, 15, 30, 60];
   const levelNames = ['Newbie', 'Beginner', 'Consistent', 'Builder', 'Master'];
-  const currentLevelIdx = Math.max(0, levelThresholds.findIndex(t => state.tokens <= t) - 1);
+  const currentLevelIdx = Math.max(0, levelThresholds.findIndex(t => state.totalCompletedTasks <= t) - 1);
   const currentLevel = levelNames[currentLevelIdx] || levelNames[levelNames.length - 1];
   const nextLevel = currentLevelIdx + 1 < levelNames.length ? levelNames[currentLevelIdx + 1] : 'Maxed';
   
   const currentBase = levelThresholds[currentLevelIdx] || levelThresholds[levelThresholds.length - 1];
-  const nextTarget = currentLevelIdx + 1 < levelThresholds.length ? levelThresholds[currentLevelIdx + 1] : currentBase + 100;
-  const progressPct = Math.min(100, Math.round(((state.tokens - currentBase) / (nextTarget - currentBase)) * 100));
+  const nextTarget = currentLevelIdx + 1 < levelThresholds.length ? levelThresholds[currentLevelIdx + 1] : currentBase + 50;
+  const progressPct = Math.min(100, Math.round(((state.totalCompletedTasks - currentBase) / (nextTarget - currentBase)) * 100));
 
   return (
     <div className="flex flex-col gap-6">
@@ -38,9 +38,9 @@ export default function StatsStack() {
 
       <motion.div className="rounded-2xl border border-[var(--border)] bg-[var(--bg-elev)] p-6 shadow-sm" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
         <div className="mb-2 flex items-center gap-2 text-sm font-semibold text-[var(--text-dim)]">
-          <Trophy size={18} strokeWidth={2.5} className="text-[var(--gold)]" /> Points
+          <Trophy size={18} strokeWidth={2.5} className="text-[var(--gold)]" /> Total Tasks Completed
         </div>
-        <div className="mb-1 text-4xl font-bold text-[var(--accent)]">{state.tokens}</div>
+        <div className="mb-1 text-4xl font-bold text-[var(--accent)]">{state.totalCompletedTasks}</div>
         <div className="mb-6 font-semibold text-[var(--text-dim)]">{currentLevel}</div>
 
         <div className="mb-2 flex justify-between text-xs font-semibold text-[var(--text-dim)] uppercase tracking-wider">

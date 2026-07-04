@@ -22,7 +22,7 @@ export default function HowItWorks() {
         <motion.div className="step-card" whileHover={{ y: -5, boxShadow: 'var(--shadow)' }} transition={{ duration: 0.2 }}>
           <div className="stepnum">03</div>
           <h3>Prove</h3>
-          <p>Snap a screenshot. AI checks it plausibly matches the step  tokens land, your streak holds, the next step unlocks.</p>
+          <p>Snap a screenshot. AI checks it plausibly matches the step  your streak holds, and the next step unlocks.</p>
         </motion.div>
       </div>
       <div className="note-band">

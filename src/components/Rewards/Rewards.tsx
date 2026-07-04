@@ -22,14 +22,7 @@ const iconMap = {
 };
 
 export default function Rewards() {
-  const { state, unlockReward, addToast } = useApp();
-
-  const handleUnlock = (id: string, cost: number, title: string, category: string) => {
-    if (category === 'badge') return; // Badges unlock automatically
-    if (state.tokens < cost) return;
-    unlockReward(id, cost);
-    addToast(`Unlocked "${title}"`);
-  };
+  const { state } = useApp();
 
   const groups = [
     { id: 'badge', title: 'Achievement Badges', icon: Trophy },
@@ -42,7 +35,7 @@ export default function Rewards() {
       <div className="mb-12">
         <h1 className="text-4xl font-bold tracking-tight text-[var(--text)] mb-3">Rewards</h1>
         <p className="text-lg text-[var(--text-dim)]">
-          Unlock rewards by completing tasks and earning points. <span className="text-[var(--accent)] font-medium">You have {state.tokens} points.</span>
+          Unlock rewards automatically by completing tasks. <span className="text-[var(--accent)] font-medium">You have completed {state.totalCompletedTasks} tasks.</span>
         </p>
       </div>
 
@@ -60,9 +53,7 @@ export default function Rewards() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {items.map((r, i) => {
-                  const isUnlocked = r.category === 'badge' ? state.tokens >= r.cost : !!state.unlocked[r.id];
-                  const canAfford = state.tokens >= r.cost;
-                  const isClickable = !isUnlocked && r.category !== 'badge' && canAfford;
+                  const isUnlocked = state.totalCompletedTasks >= r.unlocksAtTask;
                   const Icon = iconMap[r.icon as keyof typeof iconMap];
 
                   return (
@@ -71,12 +62,11 @@ export default function Rewards() {
                       initial={{ opacity: 0, y: 15 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: i * 0.05 }}
-                      onClick={() => isClickable && handleUnlock(r.id, r.cost, r.title, r.category)}
                       className={`relative rounded-2xl p-6 transition-all ${
                         isUnlocked
                           ? 'border border-[var(--accent)] bg-[var(--bg-elev)] shadow-sm'
                           : 'border border-[var(--border)] bg-transparent opacity-80'
-                      } ${isClickable ? 'cursor-pointer hover:opacity-100 hover:border-orange-300 dark:hover:border-orange-800' : ''}`}
+                      }`}
                     >
                       {/* Top Right Status */}
                       <div className="absolute top-5 right-5">
@@ -109,7 +99,7 @@ export default function Rewards() {
                         {isUnlocked ? (
                           <span className="text-green-600 dark:text-green-500">Unlocked</span>
                         ) : (
-                          <span className="text-[var(--text-faint)]">{r.cost} pts</span>
+                          <span className="text-[var(--text-faint)]">Unlocks at {r.unlocksAtTask} tasks</span>
                         )}
                       </div>
                     </motion.div>

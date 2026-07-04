@@ -43,7 +43,7 @@ export default function ChatEntry({ entry }: Props) {
             <div className="followup-inline">
               <h3 style={{ fontSize: '16px', margin: '0 0 8px' }}>Want to actually go do this?</h3>
               <p style={{ color: 'var(--text-dim)', fontSize: '14px', margin: '0 0 14px' }}>
-                Turn this into small steps you complete for real  with proof and tokens along the way.
+                Turn this into small steps you complete for real  with proof along the way.
               </p>
               <div style={{ display: 'flex', gap: '10px' }}>
                 <button

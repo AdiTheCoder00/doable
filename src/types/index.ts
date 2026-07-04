@@ -5,9 +5,8 @@ export type View = 'dashboard' | 'workspace' | 'rewards' | 'history';
 
 export interface Task {
   title: string;
-  description?: string;
   diff: Diff;
-  tokens: number;
+  description: string;
   done: boolean;
 }
 
@@ -49,7 +48,7 @@ export interface Reward {
   icon: string;
   title: string;
   desc: string;
-  cost: number;
+  unlocksAtTask: number;
 }
 
 export interface PendingTask {
@@ -60,7 +59,7 @@ export interface PendingTask {
 export interface AppState {
   theme: Theme;
   inApp: boolean;
-  tokens: number;
+  totalCompletedTasks: number;
   streak: number;
   view: View;
   roadmap: Roadmap | null;
