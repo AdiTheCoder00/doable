@@ -1,5 +1,6 @@
 import { useApp } from '../../context/AppContext';
 import REWARDS from '../../data/rewards';
+import { motion } from 'framer-motion';
 
 export default function Rewards() {
   const { state, unlockReward, addToast } = useApp();
@@ -20,25 +21,33 @@ export default function Rewards() {
         <div className="stat-pill">{'\u{1FA99}'} {state.tokens} tokens</div>
       </div>
       <div className="reward-grid">
-        {REWARDS.map((r) => {
+        {REWARDS.map((r, i) => {
           const unlocked = !!state.unlocked[r.id];
           const canAfford = state.tokens >= r.cost;
           return (
-            <div className={`reward-card${unlocked ? ' unlocked' : ''}`} key={r.id}>
+            <motion.div 
+              className={`reward-card${unlocked ? ' unlocked' : ''}`} 
+              key={r.id}
+              initial={{ opacity: 0, scale: 0.95, y: 10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              transition={{ delay: i * 0.05 + 0.1 }}
+            >
               <div className="re">{r.icon}</div>
               <h4>{r.title}</h4>
               <p>{r.desc}</p>
               <div className="cost">{unlocked ? ' Unlocked' : `${r.cost} \u{1FA99}`}</div>
               {!unlocked && (
-                <button
+                <motion.button
+                  whileHover={canAfford ? { scale: 1.05 } : {}}
+                  whileTap={canAfford ? { scale: 0.95 } : {}}
                   className={`btn-small${canAfford ? ' solid' : ''}`}
                   disabled={!canAfford}
                   onClick={() => handleUnlock(r.id, r.cost, r.title)}
                 >
                   {canAfford ? 'Unlock' : 'Need more tokens'}
-                </button>
+                </motion.button>
               )}
-            </div>
+            </motion.div>
           );
         })}
       </div>

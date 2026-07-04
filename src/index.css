@@ -1,5 +1,12 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: 'CircularStd';
+  src: url('./assets/CircularStd-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
 @theme {
   --color-background: var(--bg);
   --color-foreground: var(--text);
@@ -24,20 +31,22 @@
 }
 
 :root[data-theme="dark"] {
-  --bg: #0c0c0d; --bg-elev: #171718; --bg-elev-2: #212022; --border: #333031;
-  --text: #f7f5f2; --text-dim: #aaa6a1; --text-faint: #726d68;
+  --bg: #09090b; --bg-elev: rgba(24, 24, 27, 0.7); --bg-elev-2: rgba(39, 39, 42, 0.7); --border: rgba(255, 255, 255, 0.1);
+  --text: #f8fafc; --text-dim: #94a3b8; --text-faint: #475569;
   --accent: #ff7a1a; --accent-strong: #ff5400; --accent-text: #ffffff;
   --gold: #ffc857; --coral: #ff5c33; --success: #43d9a3;
-  --shadow: 0 20px 50px -20px rgba(0, 0, 0, .7);
-  --grad-hero: radial-gradient(circle at 20% 15%, rgba(255, 122, 26, .30), transparent 45%), radial-gradient(circle at 85% 10%, rgba(255, 200, 87, .14), transparent 40%);
+  --shadow: 0 20px 50px -20px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255,255,255,0.05);
+  --grad-hero: radial-gradient(circle at 15% 50%, rgba(255, 122, 26, 0.15), transparent 35%), radial-gradient(circle at 85% 30%, rgba(255, 200, 87, 0.1), transparent 40%);
+  --glass-blur: blur(16px);
 }
 :root[data-theme="light"] {
-  --bg: #ffffff; --bg-elev: #ffffff; --bg-elev-2: #fff2e6; --border: #f0e0cf;
-  --text: #171514; --text-dim: #6b6560; --text-faint: #9c948c;
-  --accent: #ff7a1a; --accent-strong: #e85e00; --accent-text: #ffffff;
+  --bg: #FFFDF8; --bg-elev: #ffffff; --bg-elev-2: #f4efea; --border: #F2DCC7;
+  --text: #1B1B1F; --text-dim: #6F6F76; --text-faint: #94a3b8;
+  --accent: #FF7A1A; --accent-strong: #FF8D38; --accent-text: #ffffff;
   --gold: #c9820c; --coral: #e2532f; --success: #1fae7e;
-  --shadow: 0 20px 50px -25px rgba(255, 122, 26, .25);
-  --grad-hero: radial-gradient(circle at 20% 15%, rgba(255, 122, 26, .16), transparent 45%), radial-gradient(circle at 85% 10%, rgba(255, 200, 87, .22), transparent 40%);
+  --shadow: 0 20px 40px -20px rgba(0,0,0,0.1), 0 0 0 1px rgba(0,0,0,0.05);
+  --grad-hero: radial-gradient(circle at 15% 50%, rgba(255, 122, 26, 0.03), transparent 45%), radial-gradient(circle at 85% 30%, rgba(255, 122, 26, 0.03), transparent 50%);
+  --glass-blur: blur(16px);
 }
 * {
   box-sizing: border-box;
@@ -55,10 +64,16 @@ html, body {
   min-height: 100vh;
 }
 h1, h2, h3, .brand, .node-num, .btn-primary, .btn-ghost, nav .navlink {
-  font-family: 'Fredoka', sans-serif;
+  font-family: 'Satoshi', sans-serif;
 }
 .mono {
   font-family: 'JetBrains Mono', monospace;
+}
+.text-gradient {
+  background: linear-gradient(135deg, var(--accent), var(--coral));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 a {
   color: inherit;
@@ -87,25 +102,27 @@ nav {
   align-items: center;
   justify-content: space-between;
   padding: 18px 28px;
-  background: color-mix(in srgb, var(--bg) 88%, transparent);
-  backdrop-filter: blur(10px);
+  background: color-mix(in srgb, var(--bg) 70%, transparent);
+  backdrop-filter: var(--glass-blur);
 }
 .brand {
   display: flex;
   align-items: center;
-  gap: 10px;
-  font-size: 20px;
-  font-weight: 600;
+  gap: 12px;
+  font-size: 26px;
+  font-weight: 700;
+}
+[data-theme='dark'] .brand img {
+  filter: invert(1);
 }
 .brand .mark {
-  width: 30px;
-  height: 30px;
-  border-radius: 9px;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
   background: linear-gradient(135deg, var(--accent), var(--coral));
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 15px;
   box-shadow: var(--shadow);
 }
 nav .navlinks {
@@ -130,6 +147,7 @@ nav .stat-pill {
   align-items: center;
   gap: 6px;
   background: var(--bg-elev-2);
+  backdrop-filter: var(--glass-blur);
   border: 1px solid var(--border);
   padding: 6px 12px;
   border-radius: 999px;
@@ -146,6 +164,7 @@ nav .stat-pill {
   height: 38px;
   border-radius: 50%;
   background: var(--bg-elev-2);
+  backdrop-filter: var(--glass-blur);
   border: 1px solid var(--border);
   display: flex;
   align-items: center;
@@ -155,20 +174,26 @@ nav .stat-pill {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, var(--accent-strong), var(--coral));
-  color: #fff;
-  padding: 14px 26px;
-  border-radius: 14px;
+  background: var(--accent);
+  color: var(--accent-text);
+  padding: 0 36px;
+  height: 60px;
+  border-radius: 18px;
   font-weight: 600;
   font-size: 16px;
+  border: none;
+  cursor: pointer;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
-  box-shadow: var(--shadow);
-  transition: transform .15s ease;
+  box-shadow: 0 12px 30px rgba(255,122,26,.25);
+  transition: transform .2s ease, box-shadow .2s ease, background-color .2s ease;
 }
 .btn-primary:hover {
+  background: var(--accent-strong);
   transform: translateY(-2px);
+  box-shadow: 0 15px 35px rgba(255,122,26,.3);
 }
 .btn-primary:disabled {
   opacity: .4;
@@ -212,13 +237,42 @@ nav .stat-pill {
 #view-landing .hero {
   position: absolute;
   inset: 0;
-  padding: 40px 28px;
+  padding: 60px 28px;
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   overflow: hidden;
+}
+@media (min-width: 768px) {
+  #view-landing .hero { padding: 80px 28px; }
+}
+@media (min-width: 1024px) {
+  #view-landing .hero { padding: 120px 28px; }
+}
+
+.hero-h1 {
+  font-weight: 900;
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+  font-size: 42px;
+}
+@media (min-width: 768px) {
+  .hero-h1 { font-size: 64px; }
+}
+@media (min-width: 1024px) {
+  .hero-h1 { font-size: 96px; }
+}
+
+.hero-p {
+  font-size: 18px;
+  font-weight: 500;
+  max-width: 700px;
+  line-height: 1.6;
+}
+@media (min-width: 1024px) {
+  .hero-p { font-size: 22px; }
 }
 #view-landing .hero .hero-bg {
   position: absolute;
@@ -234,6 +288,7 @@ nav .stat-pill {
   align-items: center;
   gap: 8px;
   background: var(--bg-elev);
+  backdrop-filter: var(--glass-blur);
   border: 1px solid var(--border);
   padding: 8px 16px;
   border-radius: 999px;
@@ -308,6 +363,7 @@ nav .stat-pill {
 }
 .step-card {
   background: var(--bg-elev);
+  backdrop-filter: var(--glass-blur);
   border: 1px solid var(--border);
   border-radius: 20px;
   padding: 28px;
@@ -340,6 +396,7 @@ nav .stat-pill {
   max-width: 960px;
   margin: 56px auto 0;
   background: var(--bg-elev);
+  backdrop-filter: var(--glass-blur);
   border: 1px solid var(--border);
   border-radius: 20px;
   padding: 26px 30px;
@@ -395,6 +452,7 @@ nav .stat-pill {
 }
 .stat-card {
   background: var(--bg-elev);
+  backdrop-filter: var(--glass-blur);
   border: 1px solid var(--border);
   border-radius: 18px;
   padding: 22px 24px;
@@ -444,6 +502,7 @@ nav .stat-pill {
 
 .panel {
   background: var(--bg-elev);
+  backdrop-filter: var(--glass-blur);
   border: 1px solid var(--border);
   border-radius: 20px;
   padding: 26px;
@@ -586,6 +645,7 @@ textarea {
   width: 100%;
   min-height: 110px;
   background: var(--bg-elev);
+  backdrop-filter: var(--glass-blur);
   border: 1px solid var(--border);
   border-radius: 16px;
   color: var(--text);
@@ -597,6 +657,7 @@ textarea {
 textarea:focus {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
+  box-shadow: 0 10px 30px -10px rgba(255,122,26,0.3);
 }
 .seriousness {
   display: grid;
@@ -723,6 +784,7 @@ textarea:focus {
 }
 .plan-sidebar {
   background: var(--bg-elev);
+  backdrop-filter: var(--glass-blur);
   border: 1px solid var(--border);
   border-radius: 20px;
   padding: 22px;
@@ -788,6 +850,7 @@ textarea:focus {
   background: var(--success);
   border-color: var(--success);
   color: #0b2b20;
+  box-shadow: 0 0 15px color-mix(in srgb, var(--success) 40%, transparent);
 }
 .milestone.current .node {
   background: var(--accent);
@@ -797,6 +860,7 @@ textarea:focus {
 }
 .milestone-card {
   background: var(--bg-elev);
+  backdrop-filter: var(--glass-blur);
   border: 1px solid var(--border);
   border-radius: 16px;
   padding: 18px 20px;
@@ -887,6 +951,7 @@ textarea:focus {
 }
 .reward-card {
   background: var(--bg-elev);
+  backdrop-filter: var(--glass-blur);
   border: 1px solid var(--border);
   border-radius: 18px;
   padding: 20px;
@@ -916,6 +981,7 @@ textarea:focus {
 }
 .reward-card.unlocked {
   border-color: var(--success);
+  box-shadow: 0 0 15px color-mix(in srgb, var(--success) 30%, transparent), inset 0 0 15px color-mix(in srgb, var(--success) 10%, transparent);
 }
 .reward-card.unlocked .cost {
   color: var(--success);
@@ -935,6 +1001,7 @@ textarea:focus {
 }
 .modal-card {
   background: var(--bg-elev);
+  backdrop-filter: var(--glass-blur);
   border: 1px solid var(--border);
   border-radius: 22px;
   padding: 32px;
@@ -1025,6 +1092,7 @@ textarea:focus {
 }
 .toast {
   background: var(--bg-elev-2);
+  backdrop-filter: var(--glass-blur);
   border: 1px solid var(--border);
   color: var(--text);
   padding: 12px 20px;

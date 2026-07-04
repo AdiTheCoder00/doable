@@ -1,6 +1,7 @@
 import type { ChatEntry as ChatEntryType, Seriousness } from '../../types';
 import { useApp } from '../../context/AppContext';
 import { escapeHtml } from '../../utils/helpers';
+import { motion } from 'framer-motion';
 
 interface Props {
   entry: ChatEntryType;
@@ -14,7 +15,12 @@ export default function ChatEntry({ entry }: Props) {
   };
 
   return (
-    <div className="panel chat-entry">
+    <motion.div 
+      className="panel chat-entry"
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+    >
       {entry.answering ? (
         <>
           <div className="answer-q">You asked</div>
@@ -76,6 +82,6 @@ export default function ChatEntry({ entry }: Props) {
           )}
         </>
       )}
-    </div>
+    </motion.div>
   );
 }

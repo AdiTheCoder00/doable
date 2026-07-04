@@ -1,4 +1,5 @@
 import { useApp } from '../../context/AppContext';
+import { motion } from 'framer-motion';
 
 export default function RecentTasks() {
   const { state, setView } = useApp();
@@ -22,7 +23,15 @@ export default function RecentTasks() {
         {state.recent.map((r, i) => {
           const status = r.chatOnly ? 'Answered only \u00B7 no plan' : r.done ? 'Complete' : 'In progress';
           return (
-            <div className="recent-item" key={i}>
+            <motion.div 
+              className="recent-item" 
+              key={i}
+              whileHover={{ x: 5, backgroundColor: 'var(--bg-elev-2)' }}
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.5 + i * 0.1 }}
+              style={{ borderRadius: '8px', padding: '8px' }}
+            >
               <div className="left">
                 <div className={`dot${r.done ? ' on' : ''}`} />
                 <div>
@@ -31,7 +40,7 @@ export default function RecentTasks() {
                 </div>
               </div>
               {!r.chatOnly && <button className="btn-small" onClick={() => setView('workspace')}>Open</button>}
-            </div>
+            </motion.div>
           );
         })}
       </div>

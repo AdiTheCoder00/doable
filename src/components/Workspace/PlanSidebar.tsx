@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useApp } from '../../context/AppContext';
+import { motion, AnimatePresence } from 'framer-motion';
 
 function totalTasks(roadmap: NonNullable<ReturnType<typeof useApp>['state']['roadmap']>) {
   return roadmap.milestones.reduce((s, m) => s + m.tasks.length, 0);
@@ -40,10 +41,15 @@ export default function PlanSidebar() {
             <h3>Your plan</h3>
           </div>
           <div id="sidebar-body">
-            <div className="empty-state" style={{ padding: '30px 10px' }}>
+            <motion.div 
+              className="empty-state" 
+              style={{ padding: '30px 10px' }}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+            >
               <div className="big">{'\u{1F9ED}'}</div>
               Ask something on the left. If you choose to build a roadmap, it shows up here  right next to the chat, so you can mark steps done as you go.
-            </div>
+            </motion.div>
           </div>
         </div>
       </div>
@@ -70,7 +76,14 @@ export default function PlanSidebar() {
               const isOpen = openMilestone === mIdx && mstate !== 'locked';
 
               return (
-                <div className={`milestone ${mstate} ${isOpen ? 'open' : ''}`} key={mIdx} id={`m-${mIdx}`}>
+                <motion.div 
+                  className={`milestone ${mstate} ${isOpen ? 'open' : ''}`} 
+                  key={mIdx} 
+                  id={`m-${mIdx}`}
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: mIdx * 0.1 }}
+                >
                   <div className="node">{icon}</div>
                   <div className="milestone-card">
                     <div
@@ -83,8 +96,16 @@ export default function PlanSidebar() {
                       <h4>{m.title}</h4>
                       <span className="mstat">{doneCount}/{m.tasks.length}</span>
                     </div>
-                    <div className="task-list" style={{ display: isOpen ? 'block' : 'none' }}>
-                      {m.tasks.map((t, tIdx) => {
+                    <AnimatePresence initial={false}>
+                      {isOpen && (
+                        <motion.div 
+                          className="task-list"
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: 'auto', opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          style={{ overflow: 'hidden' }}
+                        >
+                          {m.tasks.map((t, tIdx) => {
                         const unlocked = taskUnlocked(state.roadmap!, mIdx, tIdx);
                         const doneClass = t.done ? 'done' : '';
                         const checkContent = t.done ? '' : '';
@@ -115,9 +136,11 @@ export default function PlanSidebar() {
                           </div>
                         );
                       })}
-                    </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                   </div>
-                </div>
+                </motion.div>
               );
             })}
           </div>

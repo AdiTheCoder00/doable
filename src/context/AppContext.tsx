@@ -19,6 +19,7 @@ const initialState: AppState = {
 type Action =
   | { type: 'SET_THEME'; theme: Theme }
   | { type: 'ENTER_APP' }
+  | { type: 'EXIT_APP' }
   | { type: 'SET_VIEW'; view: View }
   | { type: 'ASK_QUESTION'; entry: ChatEntry }
   | { type: 'RECEIVE_ANSWER'; id: number; answer: string; templateKey: string }
@@ -38,6 +39,8 @@ function reducer(state: AppState, action: Action): AppState {
       return { ...state, theme: action.theme };
     case 'ENTER_APP':
       return { ...state, inApp: true };
+    case 'EXIT_APP':
+      return { ...state, inApp: false };
     case 'SET_VIEW':
       return { ...state, view: action.view };
     case 'ASK_QUESTION': {
@@ -142,6 +145,7 @@ interface AppContextType {
   unlockReward: (id: string, cost: number) => void;
   addToast: (msg: string) => void;
   enterApp: () => void;
+  exitApp: () => void;
   setView: (view: View) => void;
   setTheme: (theme: Theme) => void;
 }
@@ -157,6 +161,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   const enterApp = useCallback(() => {
     dispatch({ type: 'ENTER_APP' });
+  }, []);
+
+  const exitApp = useCallback(() => {
+    dispatch({ type: 'EXIT_APP' });
   }, []);
 
   const setView = useCallback((view: View) => {
@@ -232,6 +240,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         unlockReward,
         addToast,
         enterApp,
+        exitApp,
         setView,
         setTheme,
       }}

@@ -1,12 +1,8 @@
 import { useApp } from '../context/AppContext';
-
-const links = [
-  { label: 'Features', href: '#features' },
-  { label: 'How it works', href: '#how-it-works' },
-];
+import logo from '../assets/logo.png';
 
 export default function Navbar() {
-  const { state, setView, enterApp, setTheme } = useApp();
+  const { state, setView, enterApp, exitApp, setTheme } = useApp();
 
   const toggleTheme = () => {
     setTheme(state.theme === 'dark' ? 'light' : 'dark');
@@ -14,24 +10,9 @@ export default function Navbar() {
 
   return (
     <nav id="mainnav">
-      <div className="brand">
-        <span className="mark">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <polyline points="2,8 6,12 14,4" />
-          </svg>
-        </span>
-        Doable.
+      <div className="brand" onClick={exitApp} style={{ cursor: 'pointer' }} role="button" tabIndex={0}>
+        <img src={logo} alt="Doable" style={{ height: '48px', width: 'auto', objectFit: 'contain' }} />
       </div>
-
-      {!state.inApp && (
-        <div className="navlinks">
-          {links.map((l) => (
-            <a key={l.label} className="navlink" href={l.href} onClick={(e) => { e.preventDefault(); enterApp(); }}>
-              {l.label}
-            </a>
-          ))}
-        </div>
-      )}
 
       {state.inApp && (
         <div className="navlinks" id="navlinks-app">
