@@ -30,7 +30,7 @@ export default function Hero() {
           squareSize={40}
           direction="diagonal"
           borderColor="rgba(200,200,200,0.25)"
-          hoverFillColor="var(--accent)"
+          hoverFillColor="rgba(255,122,26,0.15)"
           shape="square"
           hoverTrailAmount={5}
         />

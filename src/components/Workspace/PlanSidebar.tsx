@@ -26,6 +26,12 @@ function taskUnlocked(roadmap: NonNullable<ReturnType<typeof useApp>['state']['r
 export default function PlanSidebar() {
   const { state, openProofModal } = useApp();
 
+  const [openMilestone, setOpenMilestone] = useState<number | null>(() => {
+    if (!state.roadmap) return null;
+    const idx = state.roadmap.milestones.findIndex((_, i) => milestoneState(state.roadmap!, i) === 'current');
+    return idx >= 0 ? idx : null;
+  });
+
   if (!state.roadmap) {
     return (
       <div className="plan-col">
@@ -47,10 +53,6 @@ export default function PlanSidebar() {
   const total = totalTasks(state.roadmap);
   const done = doneTasks(state.roadmap);
   const pct = total ? Math.round((100 * done) / total) : 0;
-  const [openMilestone, setOpenMilestone] = useState<number | null>(() => {
-    const idx = state.roadmap!.milestones.findIndex((_, i) => milestoneState(state.roadmap!, i) === 'current');
-    return idx >= 0 ? idx : null;
-  });
 
   return (
     <div className="plan-col">
