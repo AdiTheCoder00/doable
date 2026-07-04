@@ -89,7 +89,6 @@ nav {
   padding: 18px 28px;
   background: color-mix(in srgb, var(--bg) 88%, transparent);
   backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--border);
 }
 .brand {
   display: flex;
@@ -209,17 +208,17 @@ nav .stat-pill {
   min-height: calc(100vh - 73px);
   display: flex;
   align-items: center;
+  background: var(--grad-hero);
 }
 #view-landing .hero {
   position: relative;
-  padding: 60px 28px;
+  padding: 40px 28px;
   text-align: center;
   flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: var(--grad-hero);
 }
 .eyebrow {
   display: inline-flex;
