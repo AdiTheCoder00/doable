@@ -17,7 +17,7 @@ export default function StatsGrid() {
     <div className="stat-grid">
       <div className="stat-card">
         <div className="label">{'\u{1F525}'} Current streak</div>
-        <div className="value streak">{state.streak} days</div>
+        <div className="value streak">{state.streak > 0 ? `${state.streak} days` : 'Start today'}</div>
         <div className="sub">Prove one step today to keep it alive</div>
       </div>
       <div className="stat-card">
@@ -27,8 +27,8 @@ export default function StatsGrid() {
       </div>
       <div className="stat-card">
         <div className="label">{'\u2705'} Progress</div>
-        <div className="value tasks">{done} / {total}</div>
-        <div className="bar"><i style={{ width: pct + '%' }} /></div>
+        <div className="value tasks">{total > 0 ? `${done} / ${total}` : '\u2014'}</div>
+        {total > 0 && <div className="bar"><i style={{ width: pct + '%' }} /></div>}
       </div>
     </div>
   );
