@@ -1,6 +1,5 @@
 import { motion, type Variants } from 'framer-motion';
 import { useApp } from '../../context/AppContext';
-import PixelBlast from '../PixelBlast/PixelBlast';
 
 const container: Variants = {
   hidden: {},
@@ -24,27 +23,6 @@ export default function Hero() {
 
   return (
     <div className="hero">
-      <div className="hero-bg">
-        <PixelBlast
-          variant="circle"
-          pixelSize={6}
-          color="#F97316"
-          patternScale={3}
-          patternDensity={1.2}
-          pixelSizeJitter={0.5}
-          enableRipples
-          rippleSpeed={0.4}
-          rippleThickness={0.12}
-          rippleIntensityScale={1.5}
-          liquid
-          liquidStrength={0.12}
-          liquidRadius={1.2}
-          liquidWobbleSpeed={5}
-          speed={0.6}
-          edgeFade={0.25}
-          transparent
-        />
-      </div>
       <motion.div
         className="relative z-10 mx-auto flex max-w-4xl flex-col items-center justify-center px-6 text-center"
         variants={container}
