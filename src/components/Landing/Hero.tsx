@@ -29,7 +29,7 @@ export default function Hero() {
           speed={0.5}
           squareSize={40}
           direction="diagonal"
-          borderColor="var(--border)"
+          borderColor="rgba(200,200,200,0.25)"
           hoverFillColor="var(--accent)"
           shape="square"
           hoverTrailAmount={5}
