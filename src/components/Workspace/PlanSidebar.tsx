@@ -1,0 +1,126 @@
+import { useState } from 'react';
+import { useApp } from '../../context/AppContext';
+
+function totalTasks(roadmap: NonNullable<ReturnType<typeof useApp>['state']['roadmap']>) {
+  return roadmap.milestones.reduce((s, m) => s + m.tasks.length, 0);
+}
+function doneTasks(roadmap: NonNullable<ReturnType<typeof useApp>['state']['roadmap']>) {
+  return roadmap.milestones.reduce((s, m) => s + m.tasks.filter((t) => t.done).length, 0);
+}
+function milestoneState(roadmap: NonNullable<ReturnType<typeof useApp>['state']['roadmap']>, mIdx: number) {
+  const m = roadmap.milestones[mIdx];
+  const allDone = m.tasks.every((t) => t.done);
+  if (allDone) return 'done';
+  const prev = roadmap.milestones[mIdx - 1];
+  if (mIdx === 0 || (prev && prev.tasks.every((t) => t.done))) return 'current';
+  return 'locked';
+}
+function taskUnlocked(roadmap: NonNullable<ReturnType<typeof useApp>['state']['roadmap']>, mIdx: number, tIdx: number) {
+  const mstate = milestoneState(roadmap, mIdx);
+  if (mstate === 'locked') return false;
+  const m = roadmap.milestones[mIdx];
+  if (tIdx === 0) return true;
+  return m.tasks[tIdx - 1].done;
+}
+
+export default function PlanSidebar() {
+  const { state, openProofModal } = useApp();
+
+  if (!state.roadmap) {
+    return (
+      <div className="plan-col">
+        <div className="plan-sidebar">
+          <div className="panel-head">
+            <h3>Your plan</h3>
+          </div>
+          <div id="sidebar-body">
+            <div className="empty-state" style={{ padding: '30px 10px' }}>
+              <div className="big">{'\u{1F9ED}'}</div>
+              Ask something on the left. If you choose to build a roadmap, it shows up here \u2014 right next to the chat, so you can mark steps done as you go.
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const total = totalTasks(state.roadmap);
+  const done = doneTasks(state.roadmap);
+  const pct = total ? Math.round((100 * done) / total) : 0;
+  const [openMilestone, setOpenMilestone] = useState<number | null>(() => {
+    const idx = state.roadmap!.milestones.findIndex((_, i) => milestoneState(state.roadmap!, i) === 'current');
+    return idx >= 0 ? idx : null;
+  });
+
+  return (
+    <div className="plan-col">
+      <div className="plan-sidebar">
+        <div className="panel-head">
+          <h3>{state.roadmap.title}</h3>
+          <span className="stat-pill" style={{ display: 'inline-flex' }}>{'\u2705'} {pct}%</span>
+        </div>
+        <div id="sidebar-body">
+          <div className="quest-path">
+            {state.roadmap.milestones.map((m, mIdx) => {
+              const mstate = milestoneState(state.roadmap!, mIdx);
+              const doneCount = m.tasks.filter((t) => t.done).length;
+              const icon = mstate === 'done' ? '\u2713' : (mIdx + 1).toString();
+              const isOpen = openMilestone === mIdx && mstate !== 'locked';
+
+              return (
+                <div className={`milestone ${mstate} ${isOpen ? 'open' : ''}`} key={mIdx} id={`m-${mIdx}`}>
+                  <div className="node">{icon}</div>
+                  <div className="milestone-card">
+                    <div
+                      className="milestone-head"
+                      onClick={() => {
+                        if (mstate === 'locked') return;
+                        setOpenMilestone(isOpen ? null : mIdx);
+                      }}
+                    >
+                      <h4>{m.title}</h4>
+                      <span className="mstat">{doneCount}/{m.tasks.length}</span>
+                    </div>
+                    <div className="task-list" style={{ display: isOpen ? 'block' : 'none' }}>
+                      {m.tasks.map((t, tIdx) => {
+                        const unlocked = taskUnlocked(state.roadmap!, mIdx, tIdx);
+                        const doneClass = t.done ? 'done' : '';
+                        const checkContent = t.done ? '\u2713' : '';
+                        let action: React.ReactNode;
+                        if (t.done) {
+                          action = <span className={`diff-tag diff-${t.diff}`}>+{t.tokens} {'\u{1FA99}'}</span>;
+                        } else if (unlocked) {
+                          action = (
+                            <button className="btn-small solid" onClick={() => openProofModal(mIdx, tIdx)}>
+                              Upload proof
+                            </button>
+                          );
+                        } else {
+                          action = <span className="diff-tag" style={{ background: 'transparent', color: 'var(--text-faint)' }}>{'\u{1F512}'} locked</span>;
+                        }
+                        return (
+                          <div className={`task-row ${doneClass}`} key={tIdx}>
+                            <div className="tleft">
+                              <div className="check">{checkContent}</div>
+                              <div>
+                                <div className="ttitle">{t.title}</div>
+                                <div className={`diff-tag diff-${t.diff}`} style={{ marginTop: '4px' }}>
+                                  {t.diff} \u00B7 {t.tokens} {'\u{1FA99}'}
+                                </div>
+                              </div>
+                            </div>
+                            {action}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
