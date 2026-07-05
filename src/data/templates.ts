@@ -1,14 +1,9 @@
 import type { Diff, Milestone } from '../types';
 
-const DIFF_TOKENS: Record<Diff, number> = { easy: 50, medium: 150, hard: 400 };
 export const SERIOUSNESS_MILESTONES = { curious: 2, learn: 4, master: 5 };
 
-function t(diff: Diff): number {
-  return DIFF_TOKENS[diff];
-}
-
 function task(title: string, diff: Diff, description?: string) {
-  return { title, diff, description, done: false };
+  return { title, diff, description: description || '', done: false };
 }
 
 interface Template {

@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Clock, ChevronRight, LayoutGrid } from 'lucide-react';
 
 export default function RecentTasks() {
-  const { state, setView, resumeTask } = useApp();
+  const { state, resumeTask } = useApp();
 
   if (state.recent.length === 0) {
     return (

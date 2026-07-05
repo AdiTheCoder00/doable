@@ -1,4 +1,4 @@
-import type { ChatEntry as ChatEntryType, Seriousness } from '../../types';
+import type { ChatEntry as ChatEntryType } from '../../types';
 import { useApp } from '../../context/AppContext';
 import { escapeHtml } from '../../utils/helpers';
 import { motion } from 'framer-motion';
@@ -8,11 +8,7 @@ interface Props {
 }
 
 export default function ChatEntry({ entry }: Props) {
-  const { decideYes, decideNo, setSeriousness } = useApp();
-
-  const handleSeriousness = (level: Seriousness) => {
-    setSeriousness(entry.id, level);
-  };
+  const { decideYes, decideNo } = useApp();
 
   return (
     <motion.div 

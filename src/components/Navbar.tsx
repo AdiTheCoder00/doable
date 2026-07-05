@@ -1,6 +1,6 @@
 import { useApp } from '../context/AppContext';
-import logo from '../assets/logo.png';
-import { LayoutGrid, Plus, Book, Gift, Flame, Bell, Moon, Sun, Check } from 'lucide-react';
+
+import { LayoutGrid, Plus, Book, Gift, Flame, Moon, Sun } from 'lucide-react';
 
 export default function Navbar() {
   const { state, setView, enterApp, exitApp, setTheme } = useApp();
