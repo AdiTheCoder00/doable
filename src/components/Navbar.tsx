@@ -10,8 +10,9 @@ export default function Navbar() {
   };
 
   return (
+    <>
     <nav 
-      className={`sticky top-0 z-40 flex items-center justify-between px-8 py-4 transition-colors ${
+      className={`sticky top-0 z-40 flex items-center justify-between px-4 md:px-8 py-4 transition-colors ${
         state.inApp ? 'bg-[var(--bg)]' : 'bg-transparent'
       }`}
     >
@@ -22,7 +23,7 @@ export default function Navbar() {
 
       {/* Center: Nav Pills */}
       {state.inApp && (
-        <div className="flex items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--bg-elev)] p-1.5 shadow-sm">
+        <div className="hidden md:flex items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--bg-elev)] p-1.5 shadow-sm">
           <button 
             className={`flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition-colors ${state.view === 'dashboard' ? 'bg-[var(--accent)] text-white' : 'text-[var(--text-dim)] hover:bg-[var(--bg-elev-2)]'}`}
             onClick={() => setView('dashboard')}
@@ -73,5 +74,36 @@ export default function Navbar() {
         </div>
       </div>
     </nav>
+
+    {/* Mobile Bottom Navigation */}
+    {state.inApp && (
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 flex items-center justify-around border-t border-[var(--border)] bg-[var(--bg-elev)] px-2 py-3 pb-[calc(12px+env(safe-area-inset-bottom))] shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
+        <button 
+          className={`flex flex-col items-center gap-1 rounded-xl p-2 text-[10px] font-semibold transition-colors ${state.view === 'dashboard' ? 'text-[var(--accent)]' : 'text-[var(--text-dim)] hover:text-[var(--text)]'}`}
+          onClick={() => setView('dashboard')}
+        >
+          <LayoutGrid size={22} /> Home
+        </button>
+        <button 
+          className={`flex flex-col items-center gap-1 rounded-xl p-2 text-[10px] font-semibold transition-colors ${state.view === 'workspace' ? 'text-[var(--accent)]' : 'text-[var(--text-dim)] hover:text-[var(--text)]'}`}
+          onClick={() => setView('workspace')}
+        >
+          <Plus size={22} /> New Task
+        </button>
+        <button 
+          className={`flex flex-col items-center gap-1 rounded-xl p-2 text-[10px] font-semibold transition-colors ${state.view === 'history' ? 'text-[var(--accent)]' : 'text-[var(--text-dim)] hover:text-[var(--text)]'}`}
+          onClick={() => setView('history')}
+        >
+          <Book size={22} /> History
+        </button>
+        <button 
+          className={`flex flex-col items-center gap-1 rounded-xl p-2 text-[10px] font-semibold transition-colors ${state.view === 'rewards' ? 'text-[var(--accent)]' : 'text-[var(--text-dim)] hover:text-[var(--text)]'}`}
+          onClick={() => setView('rewards')}
+        >
+          <Gift size={22} /> Rewards
+        </button>
+      </div>
+    )}
+    </>
   );
 }

@@ -31,8 +31,8 @@ export default function Rewards() {
   ];
 
   return (
-    <section id="view-rewards" className="mx-auto max-w-[1080px] px-8 py-10 pb-20">
-      <div className="mb-12">
+    <section id="view-rewards" className="mx-auto max-w-[1080px] px-4 md:px-8 py-10 pb-20">
+      <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
         <h1 className="text-4xl font-bold tracking-tight text-[var(--text)] mb-3">Rewards</h1>
         <p className="text-lg text-[var(--text-dim)]">
           Unlock rewards automatically by completing tasks. <span className="text-[var(--accent)] font-medium">You have completed {state.totalCompletedTasks} tasks.</span>

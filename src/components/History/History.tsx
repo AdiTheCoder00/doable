@@ -6,8 +6,8 @@ export default function History() {
   const { state, setView, resumeTask } = useApp();
 
   return (
-    <section id="view-history" className="mx-auto max-w-[1080px] px-8 py-10 pb-20">
-      <div className="mb-12">
+    <section id="view-history" className="mx-auto max-w-[1080px] px-4 md:px-8 py-10 pb-20">
+      <div className="mb-8">
         <h1 className="text-4xl font-bold tracking-tight text-[var(--text)] mb-3">History</h1>
         <p className="text-lg text-[var(--text-dim)]">
           Look back at all the tasks you've started or completed.

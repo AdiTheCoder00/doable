@@ -30,8 +30,8 @@ export default function RoadmapExecution() {
   };
 
   return (
-    <div className="mx-auto max-w-[800px] px-8 py-10 pb-32">
-      <div className="mb-10 flex items-center justify-between">
+    <div className="mx-auto max-w-[800px] px-4 md:px-8 py-10 pb-32">
+      <div className="mb-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="flex items-center gap-4">
           <button 
             onClick={() => setView('dashboard')}

@@ -95,7 +95,12 @@ button {
 .wrap {
   max-width: 1080px;
   margin: 0 auto;
-  padding: 0 28px;
+  padding: 0 16px;
+}
+@media (min-width: 768px) {
+  .wrap {
+    padding: 0 28px;
+  }
 }
 
 .brand {
@@ -361,7 +366,12 @@ nav .stat-pill {
 }
 
 .section {
-  padding: 80px 28px;
+  padding: 60px 16px;
+}
+@media (min-width: 768px) {
+  .section {
+    padding: 80px 28px;
+  }
 }
 .section-head {
   text-align: center;
@@ -455,7 +465,12 @@ nav .stat-pill {
 
 /* app shell */
 #app-inner {
-  padding: 36px 28px 90px;
+  padding: 24px 16px calc(90px + env(safe-area-inset-bottom));
+}
+@media (min-width: 768px) {
+  #app-inner {
+    padding: 36px 28px 90px;
+  }
 }
 .app-head {
   display: flex;
