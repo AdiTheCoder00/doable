@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useApp } from '../../context/AppContext';
 import ChatEntryComponent from './ChatEntry';
+import { Button } from '../ui/button';
 import { motion } from 'framer-motion';
 
 export default function ChatColumn() {
@@ -29,14 +30,14 @@ export default function ChatColumn() {
         transition={{ duration: 0.4 }}
       >
         <h1 id="ask-heading">What do you want to know?</h1>
-        <p>Ask it like you'd ask any AI. You'll get a real answer first  the plan is optional.</p>
+        <p>Ask it like you'd ask any AI. You'll get a real answer first — the plan is optional.</p>
         <textarea
           id="goal-input"
           placeholder="e.g. How do I get started with Python basics?"
           value={input}
           onChange={(e) => setInput(e.target.value)}
         />
-        <button className="btn-primary" id="ask-btn" onClick={handleAsk}>Ask Doable </button>
+        <Button id="ask-btn" style={{ borderRadius: '12px' }} onClick={handleAsk}>Ask Doable</Button>
         <div className="chip-examples">
           {[
             ['How do I get started with Python basics?', 'python basics'],

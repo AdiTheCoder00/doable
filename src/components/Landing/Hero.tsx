@@ -1,5 +1,6 @@
 import { motion, type Variants } from 'framer-motion';
-import { Zap, ArrowRight } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
+import { Button } from '../ui/button';
 import { useApp } from '../../context/AppContext';
 import ShapeGrid from '../ShapeGrid/ShapeGrid';
 
@@ -51,7 +52,7 @@ export default function Hero() {
             color: '#6F6F76',
           }}
         >
-          <Zap size={16} color="#FF7A1A" fill="#FF7A1A" />
+          <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
           AI that holds you accountable — not AI that does the work
         </motion.span>
 
@@ -73,15 +74,14 @@ export default function Hero() {
         </motion.p>
 
         <motion.div variants={fadeUp} className="flex flex-col items-center justify-center">
-          <motion.button
-            whileHover={{ scale: 1.04 }}
-            whileTap={{ scale: 0.96 }}
-            className="btn-primary"
-            style={{ padding: '0 24px', height: '52px' }}
+          <Button 
+            style={{ borderRadius: '18px' }}
+            className="px-8 py-6 text-lg group bg-orange-500 text-white hover:bg-orange-600 shadow-[0_10px_30px_rgba(255,122,26,0.3)] hover:shadow-[0_15px_40px_rgba(255,122,26,0.4)] hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-2 border-none"
             onClick={enterApp}
           >
-            Start a Task <ArrowRight size={18} />
-          </motion.button>
+            Start doing
+            <ChevronRight className="group-hover:translate-x-1 transition-transform" />
+          </Button>
           <div style={{ color: '#A89A8E', fontSize: '13px', fontWeight: 500, marginTop: '12px' }}>
             Free to use. No sign-in required.
           </div>

@@ -47,7 +47,7 @@ export default function HowItWorks() {
   };
 
   return (
-    <div id="how-it-works" className="pt-32 pb-16 px-6 md:px-12 max-w-[1100px] mx-auto text-center font-sans bg-transparent z-10 relative">
+    <div id="how-it-works" className="pt-32 pb-16 px-6 md:px-12 max-w-[1100px] mx-auto text-center bg-transparent z-10 relative">
       
       {/* Background Orbs */}
       <div className="absolute top-40 left-[5%] w-[400px] h-[400px] bg-orange-500/10 dark:bg-orange-500/5 rounded-full blur-[100px] pointer-events-none -z-10" />
@@ -169,10 +169,8 @@ export default function HowItWorks() {
           whileInView={{ opacity: 1, scale: 1, y: 0 }}
           viewport={{ once: false, amount: 0.5 }}
           transition={{ delay: 0.2, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
           onClick={enterApp}
-          className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-[var(--accent)] text-white shadow-[0_10px_30px_rgba(255,122,26,0.3)] hover:shadow-[0_15px_40px_rgba(255,122,26,0.4)] hover:bg-[var(--accent-strong)] transition-all font-semibold text-[16px] border-none cursor-pointer relative z-20"
+          className="rounded-full bg-orange-500 px-8 py-4 text-[17px] font-bold text-white transition-all hover:bg-orange-600 hover:scale-105 active:scale-95 border-none cursor-pointer inline-flex items-center gap-2 relative z-20"
         >
           Start your first task &rarr;
         </motion.button>

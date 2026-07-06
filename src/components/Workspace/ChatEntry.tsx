@@ -1,5 +1,6 @@
 import type { ChatEntry as ChatEntryType } from '../../types';
 import { useApp } from '../../context/AppContext';
+import { Button } from '../ui/button';
 import { escapeHtml } from '../../utils/helpers';
 import { motion } from 'framer-motion';
 
@@ -42,16 +43,14 @@ export default function ChatEntry({ entry }: Props) {
                 Turn this into small steps you complete for real  with proof along the way.
               </p>
               <div style={{ display: 'flex', gap: '10px' }}>
-                <button
-                  className="btn-primary"
-                  style={{ flex: '1', justifyContent: 'center', padding: '12px' }}
+                <Button
                   onClick={() => decideYes(entry.id, entry.seriousness)}
                 >
-                  Yes, build my roadmap 
-                </button>
-                <button className="btn-ghost" style={{ padding: '11px 18px' }} onClick={() => decideNo(entry.id)}>
+                  Yes, build my roadmap
+                </Button>
+                <Button variant="ghost" onClick={() => decideNo(entry.id)}>
                   No, that's all
-                </button>
+                </Button>
               </div>
             </div>
           )}

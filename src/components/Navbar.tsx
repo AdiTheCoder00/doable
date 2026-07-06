@@ -1,6 +1,7 @@
 import { useApp } from '../context/AppContext';
 
 import { LayoutGrid, Plus, Book, Gift, Flame, Moon, Sun } from 'lucide-react';
+import { Button } from './ui/button';
 
 export default function Navbar() {
   const { state, setView, enterApp, exitApp, setTheme } = useApp();
@@ -62,7 +63,10 @@ export default function Navbar() {
           </div>
         )}
         {!state.inApp && (
-          <button className="btn-primary" style={{ padding: '6px 16px', height: '38px', fontSize: '14px' }} onClick={enterApp}>
+          <button 
+            className="rounded-full bg-orange-500 px-7 py-3 text-[15px] font-bold text-white transition-all hover:bg-orange-600 hover:scale-105 active:scale-95 border-none cursor-pointer" 
+            onClick={enterApp}
+          >
             Get Started
           </button>
         )}
