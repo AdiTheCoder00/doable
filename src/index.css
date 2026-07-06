@@ -270,6 +270,7 @@ nav .stat-pill {
   background: var(--grad-hero);
   overflow-y: auto;
   overflow-x: hidden;
+  scroll-behavior: smooth;
 }
 #view-landing .hero {
   position: relative;
