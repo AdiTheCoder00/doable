@@ -16,8 +16,8 @@ export default function History() {
 
       {state.recent.length === 0 ? (
         <div className="flex flex-col items-center justify-center rounded-2xl border border-[var(--border)] bg-[var(--bg-elev)] p-16 text-center shadow-sm">
-          <div className="mb-4 flex items-center justify-center text-[var(--accent)]">
-            <BookOpen size={48} strokeWidth={1.5} />
+          <div className="mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-[var(--border)] text-[var(--accent)]">
+            <BookOpen size={40} strokeWidth={2} />
           </div>
           <h3 className="text-xl font-bold text-[var(--text)] mb-2">No history yet</h3>
           <p className="text-[var(--text-dim)] max-w-md mx-auto">
@@ -51,8 +51,8 @@ export default function History() {
                 }}
               >
                 <div className="flex items-center gap-5">
-                  <div className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-full bg-orange-100 dark:bg-orange-950/30 text-[var(--accent)]">
-                    <Clock size={26} strokeWidth={2.5} />
+                  <div className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-full bg-[var(--border)] text-[var(--accent)]">
+                    <Clock size={26} strokeWidth={2} />
                   </div>
                   <div>
                     <div className="text-[18px] font-bold text-[var(--text)] mb-1">{r.title}</div>

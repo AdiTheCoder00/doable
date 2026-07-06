@@ -8,7 +8,7 @@ export default function InteractiveDemo() {
   const fullText = "I want to build a simple landing page.";
 
   useEffect(() => {
-    let timeout: NodeJS.Timeout;
+    let timeout: ReturnType<typeof setTimeout>;
     if (phase === 0) {
       setText('');
       timeout = setTimeout(() => setPhase(1), 1000);

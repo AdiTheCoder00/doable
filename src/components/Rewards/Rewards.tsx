@@ -86,10 +86,10 @@ export default function Rewards() {
                       {/* Icon Circle */}
                       <div className={`mb-4 inline-flex h-14 w-14 items-center justify-center rounded-full ${
                         isUnlocked
-                          ? 'bg-orange-100 dark:bg-orange-950/30 text-[var(--accent)]'
+                          ? 'bg-[var(--border)] text-[var(--accent)]'
                           : 'bg-[var(--bg-elev-2)] text-[var(--text-faint)]'
                       }`}>
-                        {Icon && <Icon size={26} strokeWidth={2.5} />}
+                        {Icon && <Icon size={26} strokeWidth={2} />}
                       </div>
 
                       {/* Content */}

@@ -18,7 +18,7 @@ const cardVariants = {
   visible: { 
     opacity: 1, 
     y: 0,
-    transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] }
+    transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] as const }
   }
 };
 
@@ -28,7 +28,7 @@ const floatVariants = {
     transition: {
       duration: 3.5,
       repeat: Infinity,
-      ease: "easeInOut",
+      ease: "easeInOut" as const,
       delay: custom * 0.4
     }
   })
