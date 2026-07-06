@@ -140,6 +140,13 @@ button {
 [data-theme='dark'] .brand img {
   filter: invert(1);
 }
+.axen-logo {
+  filter: invert(0);
+}
+:root[data-theme="dark"] .axen-logo,
+:root[data-theme="theme_night"] .axen-logo {
+  filter: invert(1);
+}
 .brand .mark {
   width: 40px;
   height: 40px;
