@@ -11,19 +11,28 @@ function doneTasks(roadmap: NonNullable<ReturnType<typeof useApp>['state']['road
 
 export default function StatsStack() {
   const { state } = useApp();
-  const total = state.roadmap ? totalTasks(state.roadmap) : 0;
-  const done = state.roadmap ? doneTasks(state.roadmap) : 0;
+  // Calculate total tasks (roadmaps) and total steps across all history
+  const totalRoadmaps = state.recent.filter(r => !r.chatOnly).length;
+  const totalAllSteps = state.recent.reduce((sum, r) => sum + (r.totalSteps || 0), 0);
 
-  // Mock levels based on tasks
+  // Calculate levels based on tasks
   const levelThresholds = [0, 5, 15, 30, 60];
   const levelNames = ['Newbie', 'Beginner', 'Consistent', 'Builder', 'Master'];
-  const currentLevelIdx = Math.max(0, levelThresholds.findIndex(t => state.totalCompletedTasks <= t) - 1);
+  
+  const numTasks = Number(state.totalCompletedTasks) || 0;
+  let currentLevelIdx = 0;
+  for (let i = 0; i < levelThresholds.length; i++) {
+    if (numTasks >= levelThresholds[i]) {
+      currentLevelIdx = i;
+    }
+  }
+
   const currentLevel = levelNames[currentLevelIdx] || levelNames[levelNames.length - 1];
   const nextLevel = currentLevelIdx + 1 < levelNames.length ? levelNames[currentLevelIdx + 1] : 'Maxed';
   
-  const currentBase = levelThresholds[currentLevelIdx] || levelThresholds[levelThresholds.length - 1];
+  const currentBase = levelThresholds[currentLevelIdx] || 0;
   const nextTarget = currentLevelIdx + 1 < levelThresholds.length ? levelThresholds[currentLevelIdx + 1] : currentBase + 50;
-  const progressPct = Math.min(100, Math.round(((state.totalCompletedTasks - currentBase) / (nextTarget - currentBase)) * 100));
+  const progressPct = Math.max(0, Math.min(100, Math.round(((numTasks - currentBase) / (nextTarget - currentBase)) * 100)));
 
   return (
     <div className="flex flex-col gap-6">
@@ -54,11 +63,11 @@ export default function StatsStack() {
 
       <div className="grid grid-cols-2 gap-4">
         <motion.div className="rounded-xl border border-[var(--border)] bg-[var(--bg-elev)] p-5 shadow-sm text-center" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
-          <div className="text-3xl font-bold text-[var(--text)]">{done}</div>
+          <div className="text-3xl font-bold text-[var(--text)]">{totalRoadmaps}</div>
           <div className="mt-1 text-sm font-semibold text-[var(--text-dim)]">Tasks</div>
         </motion.div>
         <motion.div className="rounded-xl border border-[var(--border)] bg-[var(--bg-elev)] p-5 shadow-sm text-center" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
-          <div className="text-3xl font-bold text-[var(--text)]">{total}</div>
+          <div className="text-3xl font-bold text-[var(--text)]">{totalAllSteps}</div>
           <div className="mt-1 text-sm font-semibold text-[var(--text-dim)]">Steps</div>
         </motion.div>
       </div>

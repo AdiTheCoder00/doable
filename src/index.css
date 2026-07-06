@@ -93,7 +93,7 @@ body:has(#view-landing) {
   transition: background .3s ease, color .3s ease;
   min-height: 100vh;
 }
-h1, h2, h3, .brand, .node-num, .btn-primary, .btn-ghost, nav .navlink {
+h1, h2, h3, .brand, .node-num, nav .navlink {
   font-family: 'Plus Jakarta Sans', sans-serif;
 }
 .mono, .font-mono {
@@ -235,12 +235,13 @@ nav .stat-pill {
 }
 
 .btn-primary {
+  font-family: 'Inter', sans-serif !important;
   background: var(--accent);
   color: var(--accent-text);
   padding: 0 36px;
   height: 60px;
   border-radius: 18px;
-  font-weight: 700;
+  font-weight: 600;
   font-size: 15px;
   border: none;
   cursor: pointer;
