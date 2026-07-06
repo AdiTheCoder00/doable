@@ -5,7 +5,7 @@ export default function HowItWorks() {
   const { enterApp } = useApp();
 
   return (
-    <div className="py-24 px-6 md:px-12 max-w-[1100px] mx-auto text-center font-sans bg-transparent z-10 relative">
+    <div id="how-it-works" className="py-24 px-6 md:px-12 max-w-[1100px] mx-auto text-center font-sans bg-transparent z-10 relative">
       <h2 className="text-4xl md:text-5xl font-bold text-[var(--text)] mb-16 font-['Plus_Jakarta_Sans']">
         How it works
       </h2>

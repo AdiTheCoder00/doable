@@ -73,15 +73,28 @@ export default function Hero() {
         </motion.p>
 
         <motion.div variants={fadeUp} className="flex flex-col items-center justify-center">
-          <motion.button
-            whileHover={{ scale: 1.04 }}
-            whileTap={{ scale: 0.96 }}
-            className="btn-primary"
-            style={{ padding: '0 24px', height: '52px' }}
-            onClick={enterApp}
-          >
-            Start a Task <ArrowRight size={18} />
-          </motion.button>
+          <div className="flex flex-row items-center justify-center gap-4">
+            <motion.button
+              whileHover={{ scale: 1.04 }}
+              whileTap={{ scale: 0.96 }}
+              className="btn-primary"
+              style={{ padding: '0 24px', height: '52px' }}
+              onClick={enterApp}
+            >
+              Start a Task <ArrowRight size={18} />
+            </motion.button>
+            <motion.button
+              whileHover={{ scale: 1.04 }}
+              whileTap={{ scale: 0.96 }}
+              className="btn-ghost"
+              style={{ padding: '0 24px', height: '52px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
+              onClick={() => {
+                document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' });
+              }}
+            >
+              How it works
+            </motion.button>
+          </div>
           <div style={{ color: '#A89A8E', fontSize: '13px', fontWeight: 500, marginTop: '12px' }}>
             Free to use. No sign-in required.
           </div>
