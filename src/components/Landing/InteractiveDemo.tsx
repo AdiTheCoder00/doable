@@ -120,7 +120,7 @@ export default function InteractiveDemo() {
                 initial={{ rotate: -90, scale: 0 }}
                 animate={{ rotate: 0, scale: 1 }}
                 transition={{ type: "spring", bounce: 0.6, delay: 0.3 }}
-                className="w-10 h-10 rounded-full bg-green-100 dark:bg-green-900/50 flex items-center justify-center shrink-0 shadow-inner"
+                className="w-10 h-10 rounded-full bg-green-500/10 dark:bg-green-500/10 flex items-center justify-center shrink-0 shadow-inner"
               >
                 <CheckSquare size={20} className="text-green-600 dark:text-green-400" />
               </motion.div>

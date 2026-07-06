@@ -2,13 +2,6 @@ import { useApp } from '../../context/AppContext';
 import { motion } from 'framer-motion';
 import { Flame, Trophy } from 'lucide-react';
 
-function totalTasks(roadmap: NonNullable<ReturnType<typeof useApp>['state']['roadmap']>) {
-  return roadmap.milestones.reduce((s, m) => s + m.tasks.length, 0);
-}
-function doneTasks(roadmap: NonNullable<ReturnType<typeof useApp>['state']['roadmap']>) {
-  return roadmap.milestones.reduce((s, m) => s + m.tasks.filter((t) => t.done).length, 0);
-}
-
 export default function StatsStack() {
   const { state } = useApp();
   // Calculate total tasks (roadmaps) and total steps across all history

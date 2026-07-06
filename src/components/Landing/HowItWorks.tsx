@@ -165,10 +165,10 @@ export default function HowItWorks() {
 
       <div className="mt-20">
         <motion.button 
-          initial={{ opacity: 0, scale: 0.9, y: 20 }}
-          whileInView={{ opacity: 1, scale: 1, y: 0 }}
-          viewport={{ once: false, amount: 0.5 }}
-          transition={{ delay: 0.2, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
           onClick={enterApp}
           className="rounded-full bg-orange-500 px-8 py-4 text-[17px] font-bold text-white transition-all hover:bg-orange-600 hover:scale-105 active:scale-95 border-none cursor-pointer inline-flex items-center gap-2 relative z-20"
         >

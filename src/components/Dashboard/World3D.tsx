@@ -1,8 +1,39 @@
 import { useMemo, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Float, Edges, ContactShadows, Html } from '@react-three/drei';
-import { House3D, Tree3D, Rock3D, getSpiralPositions } from './Props3D';
+import { House3D, Tree3D, Rock3D } from './Props3D';
 import rickRollVideo from '../../assets/Rickroll {HD + No ads}.mp4';
+
+function seededRandom(seed: number) {
+  const x = Math.sin(seed++) * 10000;
+  return x - Math.floor(x);
+}
+
+function getSpiralPositions(count: number) {
+  const positions: { id: number; x: number; z: number; type: 'house' | 'tree' | 'rock'; colorVariant: number }[] = [];
+  const c = 0.6; 
+  for (let i = 0; i < count; i++) {
+    const theta = (i + 1) * 2.39996; 
+    const r = c * Math.sqrt(i + 1);
+    
+    const x = r * Math.cos(theta);
+    const z = r * Math.sin(theta);
+    
+    const rand = seededRandom(i);
+    let type: 'house' | 'tree' | 'rock' = 'house';
+    if (rand < 0.3) type = 'tree';
+    else if (rand < 0.45) type = 'rock';
+
+    positions.push({
+      id: i,
+      x,
+      z,
+      type,
+      colorVariant: seededRandom(i + 100)
+    });
+  }
+  return positions;
+}
 
 const TILES: [number, number][] = [];
 for (let x = -2; x <= 2; x++) {

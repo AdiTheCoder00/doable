@@ -82,34 +82,4 @@ export function Rock3D({ position, colorVariant, delay = 0 }: { position: [numbe
   );
 }
 
-// Deterministic random
-function seededRandom(seed: number) {
-  const x = Math.sin(seed++) * 10000;
-  return x - Math.floor(x);
-}
 
-export function getSpiralPositions(count: number) {
-  const positions: { id: number; x: number; z: number; type: 'house' | 'tree' | 'rock'; colorVariant: number }[] = [];
-  const c = 0.6; 
-  for (let i = 0; i < count; i++) {
-    const theta = (i + 1) * 2.39996; 
-    const r = c * Math.sqrt(i + 1);
-    
-    const x = r * Math.cos(theta);
-    const z = r * Math.sin(theta);
-    
-    const rand = seededRandom(i);
-    let type: 'house' | 'tree' | 'rock' = 'house';
-    if (rand < 0.3) type = 'tree';
-    else if (rand < 0.45) type = 'rock';
-
-    positions.push({
-      id: i,
-      x,
-      z,
-      type,
-      colorVariant: seededRandom(i + 100)
-    });
-  }
-  return positions;
-}

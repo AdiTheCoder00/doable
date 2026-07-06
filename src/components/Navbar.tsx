@@ -1,7 +1,6 @@
 import { useApp } from '../context/AppContext';
 
 import { LayoutGrid, Plus, Book, Gift, Flame, Moon, Sun } from 'lucide-react';
-import { Button } from './ui/button';
 
 export default function Navbar() {
   const { state, setView, enterApp, exitApp, setTheme } = useApp();

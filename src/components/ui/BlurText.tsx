@@ -23,7 +23,7 @@ export function BlurText({ text, className = '', delay = 0 }: BlurTextProps) {
       y: 0,
       filter: 'blur(0px)',
       transition: {
-        type: 'spring',
+        type: 'spring' as const,
         damping: 12,
         stiffness: 100,
       },
@@ -33,7 +33,7 @@ export function BlurText({ text, className = '', delay = 0 }: BlurTextProps) {
       y: 10,
       filter: 'blur(10px)',
       transition: {
-        type: 'spring',
+        type: 'spring' as const,
         damping: 12,
         stiffness: 100,
       },
