@@ -52,7 +52,9 @@ type Action =
   | { type: 'ADD_TOAST'; message: string }
   | { type: 'REMOVE_TOAST' }
   | { type: 'CLEAR_ROADMAP' }
-  | { type: 'RESUME_TASK'; id: string };
+  | { type: 'RESUME_TASK'; id: string }
+  | { type: 'DELETE_HISTORY'; id: string }
+  | { type: 'CLEAR_HISTORY' };
 
 function reducer(state: AppState, action: Action): AppState {
   switch (action.type) {
@@ -195,6 +197,16 @@ function reducer(state: AppState, action: Action): AppState {
         view: 'workspace',
       };
     }
+    case 'DELETE_HISTORY':
+      return {
+        ...state,
+        recent: state.recent.filter((r) => r.id !== action.id),
+      };
+    case 'CLEAR_HISTORY':
+      return {
+        ...state,
+        recent: [],
+      };
     default:
       return state;
   }
@@ -217,6 +229,8 @@ interface AppContextType {
   setTheme: (theme: Theme) => void;
   clearRoadmap: () => void;
   resumeTask: (id: string) => void;
+  deleteHistory: (id: string) => void;
+  clearHistory: () => void;
 }
 
 const AppContext = createContext<AppContextType | null>(null);
@@ -316,6 +330,14 @@ export function AppProvider({ children }: { children: ReactNode }) {
     dispatch({ type: 'RESUME_TASK', id });
   }, []);
 
+  const deleteHistory = useCallback((id: string) => {
+    dispatch({ type: 'DELETE_HISTORY', id });
+  }, []);
+
+  const clearHistory = useCallback(() => {
+    dispatch({ type: 'CLEAR_HISTORY' });
+  }, []);
+
   return (
     <AppContext.Provider
       value={{
@@ -335,6 +357,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
         setTheme,
         clearRoadmap,
         resumeTask,
+        deleteHistory,
+        clearHistory,
       }}
     >
       {children}

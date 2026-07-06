@@ -1,17 +1,28 @@
 import { useApp } from '../../context/AppContext';
 import { motion } from 'framer-motion';
-import { Clock, ChevronRight, BookOpen } from 'lucide-react';
+import { Clock, ChevronRight, BookOpen, Trash2 } from 'lucide-react';
 
 export default function History() {
-  const { state, setView, resumeTask } = useApp();
+  const { state, setView, resumeTask, deleteHistory, clearHistory } = useApp();
 
   return (
     <section id="view-history" className="mx-auto max-w-[1080px] px-4 md:px-8 py-10 pb-20">
-      <div className="mb-8">
-        <h1 className="text-4xl font-bold tracking-tight text-[var(--text)] mb-3">History</h1>
-        <p className="text-lg text-[var(--text-dim)]">
-          Look back at all the tasks you've started or completed.
-        </p>
+      <div className="mb-8 flex items-end justify-between">
+        <div>
+          <h1 className="text-4xl font-bold tracking-tight text-[var(--text)] mb-3">History</h1>
+          <p className="text-lg text-[var(--text-dim)]">
+            Look back at all the tasks you've started or completed.
+          </p>
+        </div>
+        {state.recent.length > 0 && (
+          <button 
+            onClick={() => clearHistory()}
+            className="flex items-center gap-2 text-sm font-semibold text-[var(--text-dim)] hover:text-red-500 transition-colors px-3 py-2 rounded-lg hover:bg-red-500/10"
+          >
+            <Trash2 size={16} />
+            Clear All
+          </button>
+        )}
       </div>
 
       {state.recent.length === 0 ? (
@@ -59,7 +70,17 @@ export default function History() {
                     <div className="text-sm font-semibold text-[var(--text-dim)]">{statusText} &middot; {r.date}</div>
                   </div>
                 </div>
-                <div className="text-[var(--border)]">
+                <div className="flex items-center gap-4 text-[var(--border)]">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (r.id) deleteHistory(r.id);
+                    }}
+                    className="p-2 rounded-full hover:bg-red-500/10 hover:text-red-500 transition-colors text-[var(--text-dim)]"
+                    title="Delete task"
+                  >
+                    <Trash2 size={20} strokeWidth={2} />
+                  </button>
                   <ChevronRight size={24} strokeWidth={2.5} />
                 </div>
               </motion.div>
