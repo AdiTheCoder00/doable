@@ -13,10 +13,6 @@ const REWARDS: Reward[] = [
   { id: 'theme_warm', category: 'theme', icon: 'palette', title: 'Warm Theme', desc: 'Unlock a warm sunset color theme', unlocksAtTask: 5 },
   { id: 'theme_forest', category: 'theme', icon: 'leaf', title: 'Forest Theme', desc: 'Unlock a calm forest green theme', unlocksAtTask: 15 },
   { id: 'theme_night', category: 'theme', icon: 'moon', title: 'Night Owl Theme', desc: 'Unlock a deep midnight theme', unlocksAtTask: 35 },
-
-  // Avatar Skins
-  { id: 'skin_robot', category: 'skin', icon: 'bot', title: 'Robot Mascot', desc: 'Unlock the robot avatar skin', unlocksAtTask: 8 },
-  { id: 'skin_wizard', category: 'skin', icon: 'sparkles', title: 'Wizard Mascot', desc: 'Unlock the wizard avatar skin', unlocksAtTask: 20 },
 ];
 
 export default REWARDS;

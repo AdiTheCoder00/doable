@@ -44,7 +44,7 @@ export interface ChatEntry {
 
 export interface Reward {
   id: string;
-  category: 'badge' | 'theme' | 'skin';
+  category: 'badge' | 'theme';
   icon: string;
   title: string;
   desc: string;
