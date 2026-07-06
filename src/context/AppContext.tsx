@@ -90,7 +90,7 @@ function reducer(state: AppState, action: Action): AppState {
       const entry = state.chatLog.find((e) => e.id === action.id);
       return {
         ...state,
-        chatLog: state.chatLog.map((e) => (e.id === action.id ? { ...e, decided: 'no' } : e)),
+        chatLog: state.chatLog.filter((e) => e.id !== action.id),
         recent: [
           { id: Date.now().toString(), title: entry?.question ?? '', date: new Date().toLocaleDateString(), done: false, chatOnly: true },
           ...state.recent,

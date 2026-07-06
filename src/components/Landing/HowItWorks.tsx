@@ -47,7 +47,7 @@ export default function HowItWorks() {
   };
 
   return (
-    <div id="how-it-works" className="py-32 px-6 md:px-12 max-w-[1100px] mx-auto text-center font-sans bg-transparent z-10 relative">
+    <div id="how-it-works" className="pt-32 pb-16 px-6 md:px-12 max-w-[1100px] mx-auto text-center font-sans bg-transparent z-10 relative">
       
       {/* Background Orbs */}
       <div className="absolute top-40 left-[5%] w-[400px] h-[400px] bg-orange-500/10 dark:bg-orange-500/5 rounded-full blur-[100px] pointer-events-none -z-10" />
@@ -163,7 +163,7 @@ export default function HowItWorks() {
       {/* Interactive Demo Component */}
       <InteractiveDemo />
 
-      <div className="mt-32">
+      <div className="mt-20">
         <motion.button 
           initial={{ opacity: 0, scale: 0.9, y: 20 }}
           whileInView={{ opacity: 1, scale: 1, y: 0 }}
