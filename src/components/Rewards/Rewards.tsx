@@ -2,7 +2,7 @@ import { useApp } from '../../context/AppContext';
 import REWARDS from '../../data/rewards';
 import { motion } from 'framer-motion';
 import { 
-  Trophy, Palette, User, 
+  Trophy, Palette, 
   Star, Flame, Brain, Zap, Award, 
   Leaf, Moon, Bot, Sparkles, Lock 
 } from 'lucide-react';
@@ -27,7 +27,6 @@ export default function Rewards() {
   const groups = [
     { id: 'badge', title: 'Achievement Badges', icon: Trophy },
     { id: 'theme', title: 'Color Themes', icon: Palette },
-    { id: 'skin', title: 'Avatar Skins', icon: User },
   ];
 
   return (
