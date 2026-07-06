@@ -32,8 +32,10 @@ export default function WorldPanel() {
   const currentLevelIdx = Math.max(0, levelThresholds.findIndex(t => state.totalCompletedTasks <= t) - 1);
   const currentLevel = currentLevelIdx + 1;
 
-  // Flatten tasks for labels
-  const tasks = state.roadmap?.milestones.flatMap(m => m.tasks) || [];
+  // Flatten completed tasks for labels from all recent roadmaps
+  const tasks = state.recent.flatMap(r => 
+    (r.roadmap?.milestones || []).flatMap(m => m.tasks).filter(t => t.done)
+  );
 
   return (
     <motion.div 

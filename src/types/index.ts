@@ -1,4 +1,4 @@
-export type Theme = 'dark' | 'light';
+export type Theme = 'dark' | 'light' | 'theme_warm' | 'theme_forest' | 'theme_night';
 export type Seriousness = 'curious' | 'learn' | 'master';
 export type Diff = 'easy' | 'medium' | 'hard';
 export type View = 'dashboard' | 'workspace' | 'rewards' | 'history';
@@ -61,6 +61,7 @@ export interface AppState {
   inApp: boolean;
   totalCompletedTasks: number;
   streak: number;
+  lastCompletedDate: string | null;
   view: View;
   roadmap: Roadmap | null;
   recent: RecentItem[];

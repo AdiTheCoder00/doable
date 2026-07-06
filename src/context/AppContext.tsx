@@ -1,4 +1,4 @@
-import { createContext, useContext, useReducer, useCallback, type ReactNode } from 'react';
+import { createContext, useContext, useReducer, useCallback, useEffect, type ReactNode } from 'react';
 import type { AppState, Theme, View, ChatEntry, Seriousness, PendingTask } from '../types';
 import { pickTemplate, getAnswer, genericAnswer, buildRoadmapFromTemplate } from '../data/answers';
 
@@ -7,6 +7,7 @@ const initialState: AppState = {
   inApp: false,
   totalCompletedTasks: 0,
   streak: 0,
+  lastCompletedDate: null,
   view: 'dashboard',
   roadmap: null,
   recent: [],
@@ -15,6 +16,25 @@ const initialState: AppState = {
   pendingTask: null,
   toasts: [],
 };
+
+function init(initial: AppState): AppState {
+  try {
+    const saved = localStorage.getItem('doable-state');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      return { 
+        ...initial, 
+        ...parsed, 
+        inApp: initial.inApp,
+        view: initial.view,
+        pendingTask: initial.pendingTask 
+      };
+    }
+  } catch (e) {
+    console.error('Failed to parse state from localStorage', e);
+  }
+  return initial;
+}
 
 type Action =
   | { type: 'SET_THEME'; theme: Theme }
@@ -122,10 +142,37 @@ function reducer(state: AppState, action: Action): AppState {
           : r
       );
       
+      const newTotal = state.totalCompletedTasks + 1;
+      
+      // Streak calculation
+      const today = new Date().toDateString();
+      let newStreak = state.streak;
+      if (state.lastCompletedDate) {
+        const last = new Date(state.lastCompletedDate);
+        const curr = new Date(today);
+        const diffDays = Math.round((curr.getTime() - last.getTime()) / (1000 * 3600 * 24));
+        if (diffDays === 1) {
+          newStreak += 1;
+        } else if (diffDays > 1) {
+          newStreak = 1;
+        }
+      } else {
+        newStreak = 1;
+      }
+
+      // Theme unlocks
+      const newUnlocked = { ...state.unlocked };
+      if (newTotal >= 5) newUnlocked['theme_warm'] = true;
+      if (newTotal >= 15) newUnlocked['theme_forest'] = true;
+      if (newTotal >= 35) newUnlocked['theme_night'] = true;
+
       return {
         ...state,
         roadmap: newRoadmap,
-        totalCompletedTasks: state.totalCompletedTasks + 1,
+        totalCompletedTasks: newTotal,
+        streak: newStreak,
+        lastCompletedDate: today,
+        unlocked: newUnlocked,
         pendingTask: null,
         recent: newRecent,
       };
@@ -175,7 +222,23 @@ interface AppContextType {
 const AppContext = createContext<AppContextType | null>(null);
 
 export function AppProvider({ children }: { children: ReactNode }) {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(reducer, initialState, init);
+
+  useEffect(() => {
+    localStorage.setItem('doable-state', JSON.stringify({
+      theme: state.theme,
+      totalCompletedTasks: state.totalCompletedTasks,
+      streak: state.streak,
+      lastCompletedDate: state.lastCompletedDate,
+      roadmap: state.roadmap,
+      recent: state.recent,
+      unlocked: state.unlocked,
+      chatLog: state.chatLog,
+    }));
+  }, [
+    state.theme, state.totalCompletedTasks, state.streak, state.lastCompletedDate, 
+    state.roadmap, state.recent, state.unlocked, state.chatLog
+  ]);
 
   const setTheme = useCallback((theme: Theme) => {
     dispatch({ type: 'SET_THEME', theme });

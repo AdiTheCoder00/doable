@@ -1,6 +1,5 @@
 import ChatColumn from './ChatColumn';
 import PlanSidebar from './PlanSidebar';
-import RoadmapExecution from './RoadmapExecution';
 import { useApp } from '../../context/AppContext';
 
 export default function Workspace() {
@@ -8,14 +7,10 @@ export default function Workspace() {
 
   return (
     <section id="view-workspace">
-      {state.roadmap ? (
-        <RoadmapExecution />
-      ) : (
-        <div className="workspace-grid">
-          <ChatColumn />
-          <PlanSidebar />
-        </div>
-      )}
+      <div className="workspace-grid">
+        <ChatColumn />
+        <PlanSidebar />
+      </div>
     </section>
   );
 }

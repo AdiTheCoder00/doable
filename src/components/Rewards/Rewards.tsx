@@ -22,7 +22,7 @@ const iconMap = {
 };
 
 export default function Rewards() {
-  const { state } = useApp();
+  const { state, setTheme } = useApp();
 
   const groups = [
     { id: 'badge', title: 'Achievement Badges', icon: Trophy },
@@ -54,17 +54,24 @@ export default function Rewards() {
                 {items.map((r, i) => {
                   const isUnlocked = state.totalCompletedTasks >= r.unlocksAtTask;
                   const Icon = iconMap[r.icon as keyof typeof iconMap];
+                  const isActiveTheme = r.category === 'theme' && state.theme === r.id;
+                  const isClickable = r.category === 'theme' && isUnlocked;
 
                   return (
                     <motion.div
                       key={r.id}
+                      onClick={() => {
+                        if (isClickable) setTheme(r.id as any);
+                      }}
                       initial={{ opacity: 0, y: 15 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: i * 0.05 }}
-                      className={`relative rounded-2xl p-6 transition-all ${
-                        isUnlocked
-                          ? 'border border-[var(--accent)] bg-[var(--bg-elev)] shadow-sm'
-                          : 'border border-[var(--border)] bg-transparent opacity-80'
+                      className={`relative rounded-2xl p-6 transition-all ${isClickable ? 'cursor-pointer hover:scale-[1.02] active:scale-[0.98]' : ''} ${
+                        isActiveTheme
+                          ? 'border-2 border-[var(--accent)] bg-[var(--bg-elev)] shadow-md'
+                          : isUnlocked
+                            ? 'border border-[var(--accent)] bg-[var(--bg-elev)] shadow-sm'
+                            : 'border border-[var(--border)] bg-transparent opacity-80'
                       }`}
                     >
                       {/* Top Right Status */}
@@ -95,7 +102,9 @@ export default function Rewards() {
 
                       {/* Bottom Price / Status */}
                       <div className="mt-auto font-bold text-[15px]">
-                        {isUnlocked ? (
+                        {isActiveTheme ? (
+                          <span className="text-[var(--accent)]">Active</span>
+                        ) : isUnlocked ? (
                           <span className="text-green-600 dark:text-green-500">Unlocked</span>
                         ) : (
                           <span className="text-[var(--text-faint)]">Unlocks at {r.unlocksAtTask} tasks</span>
