@@ -3,6 +3,7 @@ import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Float, Edges, ContactShadows, Html } from '@react-three/drei';
 import { House3D, Tree3D, Rock3D } from './Props3D';
 import rickRollVideo from '../../assets/Rickroll {HD + No ads}.mp4';
+import type { Task } from '../../types';
 
 function seededRandom(seed: number) {
   const x = Math.sin(seed++) * 10000;
@@ -43,7 +44,7 @@ for (let x = -2; x <= 2; x++) {
   }
 }
 
-export default function World3D({ buildingsCount, tasks }: { buildingsCount: number, tasks: any[] }) {
+export default function World3D({ buildingsCount, tasks }: { buildingsCount: number, tasks: Task[] }) {
   const positions = useMemo(() => getSpiralPositions(buildingsCount), [buildingsCount]);
   const [isPlaying, setIsPlaying] = useState(false);
   const [hovered, setHovered] = useState(false);

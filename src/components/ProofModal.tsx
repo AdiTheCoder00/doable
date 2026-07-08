@@ -50,7 +50,7 @@ export default function ProofModal() {
         )}
         {step === 'verifying' && (
           <>
-            <h3>Verifying\u2026</h3>
+            <h3>Verifying{'\u2026'}</h3>
             <p className="desc">AI is checking this plausibly matches the step</p>
             <div className="spinner" />
           </>

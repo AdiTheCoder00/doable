@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useApp } from '../../context/AppContext';
 import { ArrowLeft, Upload, Check, Plus } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -8,6 +8,14 @@ export default function RoadmapExecution() {
   const [desc, setDesc] = useState('');
   const [image, setImage] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    return () => {
+      if (image) {
+        URL.revokeObjectURL(image);
+      }
+    };
+  }, [image]);
 
   if (!state.roadmap) return null;
 
@@ -113,6 +121,7 @@ export default function RoadmapExecution() {
                         accept="image/*"
                         onChange={(e) => {
                           if (e.target.files && e.target.files.length > 0) {
+                            if (image) URL.revokeObjectURL(image);
                             setImage(URL.createObjectURL(e.target.files[0]));
                           }
                         }}

@@ -78,7 +78,7 @@ export default function PlanSidebar() {
               return (
                 <motion.div 
                   className={`milestone ${mstate} ${isOpen ? 'open' : ''}`} 
-                  key={mIdx} 
+                  key={`milestone-${mIdx}`} 
                   id={`m-${mIdx}`}
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
@@ -108,7 +108,6 @@ export default function PlanSidebar() {
                           {m.tasks.map((t, tIdx) => {
                         const unlocked = taskUnlocked(state.roadmap!, mIdx, tIdx);
                         const doneClass = t.done ? 'done' : '';
-                        const checkContent = t.done ? '' : '';
                         let action: React.ReactNode;
                         if (t.done) {
                           action = <span className={`diff-tag diff-${t.diff}`}>Done</span>;
@@ -122,9 +121,9 @@ export default function PlanSidebar() {
                           action = <span className="diff-tag" style={{ background: 'transparent', color: 'var(--text-faint)' }}>🔒 locked</span>;
                         }
                         return (
-                          <div className={`task-row ${doneClass}`} key={tIdx}>
+                          <div className={`task-row ${doneClass}`} key={`task-${mIdx}-${tIdx}`}>
                             <div className="tleft">
-                              <div className="check">{checkContent}</div>
+                              <div className="check">{t.done ? '✓' : ''}</div>
                               <div>
                                 <div className="ttitle">{t.title}</div>
                                 <div className={`diff-tag diff-${t.diff}`} style={{ marginTop: '4px' }}>

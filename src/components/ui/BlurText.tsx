@@ -49,7 +49,7 @@ export function BlurText({ text, className = '', delay = 0 }: BlurTextProps) {
       style={{ display: 'inline-flex', flexWrap: 'wrap', gap: '0.25em', justifyContent: 'center' }}
     >
       {words.map((word, index) => (
-        <motion.span variants={child} key={index}>
+        <motion.span variants={child} key={`${word}-${index}`}>
           {word}
         </motion.span>
       ))}

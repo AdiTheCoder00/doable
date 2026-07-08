@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { SpeedInsights } from '@vercel/speed-insights/react';
 import { useApp } from './context/AppContext';
 import Navbar from './components/Navbar';
 import Landing from './components/Landing/Landing';
@@ -34,7 +35,7 @@ function AppContent() {
   );
 }
 
-import { SpeedInsights } from '@vercel/speed-insights/react';
+
 
 export default function App() {
   return (

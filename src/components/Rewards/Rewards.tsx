@@ -1,4 +1,5 @@
 import { useApp } from '../../context/AppContext';
+import type { Theme } from '../../types';
 import REWARDS from '../../data/rewards';
 import { motion } from 'framer-motion';
 import { 
@@ -61,7 +62,7 @@ export default function Rewards() {
                     <motion.div
                       key={r.id}
                       onClick={() => {
-                        if (isClickable) setTheme(r.id as any);
+                        if (isClickable) setTheme(r.id as Theme);
                       }}
                       initial={{ opacity: 0, y: 15 }}
                       animate={{ opacity: 1, y: 0 }}

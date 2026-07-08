@@ -1,7 +1,7 @@
 import type { ChatEntry as ChatEntryType } from '../../types';
 import { useApp } from '../../context/AppContext';
 import { Button } from '../ui/button';
-import { escapeHtml } from '../../utils/helpers';
+
 import { motion } from 'framer-motion';
 
 interface Props {
@@ -21,7 +21,7 @@ export default function ChatEntry({ entry }: Props) {
       {entry.answering ? (
         <>
           <div className="answer-q">You asked</div>
-          <div className="answer-text" style={{ marginBottom: '16px' }}>{escapeHtml(entry.question)}</div>
+          <div className="answer-text" style={{ marginBottom: '16px' }}>{entry.question}</div>
           <div className="thinking">
             Thinking
             <span className="dots">
@@ -32,7 +32,7 @@ export default function ChatEntry({ entry }: Props) {
       ) : (
         <>
           <div className="answer-q">You asked</div>
-          <div className="answer-text" style={{ marginBottom: '18px' }}>{escapeHtml(entry.question)}</div>
+          <div className="answer-text" style={{ marginBottom: '18px' }}>{entry.question}</div>
           <div className="answer-q">Doable</div>
           <div className="answer-text">{entry.answer}</div>
 

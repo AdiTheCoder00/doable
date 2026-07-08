@@ -1,4 +1,4 @@
-import { createContext, useContext, useReducer, useCallback, useEffect, type ReactNode } from 'react';
+import { createContext, useContext, useReducer, useCallback, useEffect, useMemo, type ReactNode } from 'react';
 import type { AppState, Theme, View, ChatEntry, Seriousness, PendingTask } from '../types';
 import { pickTemplate, getAnswer, genericAnswer, buildRoadmapFromTemplate } from '../data/answers';
 
@@ -338,29 +338,48 @@ export function AppProvider({ children }: { children: ReactNode }) {
     dispatch({ type: 'CLEAR_HISTORY' });
   }, []);
 
+  const contextValue = useMemo(() => ({
+    state,
+    dispatch,
+    askQuestion,
+    decideYes,
+    decideNo,
+    setSeriousness,
+    openProofModal,
+    completeTask,
+    closeModal,
+    addToast,
+    enterApp,
+    exitApp,
+    setView,
+    setTheme,
+    clearRoadmap,
+    resumeTask,
+    deleteHistory,
+    clearHistory,
+  }), [
+    state,
+    dispatch,
+    askQuestion,
+    decideYes,
+    decideNo,
+    setSeriousness,
+    openProofModal,
+    completeTask,
+    closeModal,
+    addToast,
+    enterApp,
+    exitApp,
+    setView,
+    setTheme,
+    clearRoadmap,
+    resumeTask,
+    deleteHistory,
+    clearHistory
+  ]);
+
   return (
-    <AppContext.Provider
-      value={{
-        state,
-        dispatch,
-        askQuestion,
-        decideYes,
-        decideNo,
-        setSeriousness,
-        openProofModal,
-        completeTask,
-        closeModal,
-        addToast,
-        enterApp,
-        exitApp,
-        setView,
-        setTheme,
-        clearRoadmap,
-        resumeTask,
-        deleteHistory,
-        clearHistory,
-      }}
-    >
+    <AppContext.Provider value={contextValue}>
       {children}
     </AppContext.Provider>
   );
