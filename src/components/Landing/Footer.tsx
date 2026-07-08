@@ -1,4 +1,3 @@
-import axenLogo from '../../assets/file_000000007a7472088db28a57569e894e-Photoroom.png';
 
 export default function Footer() {
   return (
@@ -23,15 +22,6 @@ export default function Footer() {
           </p>
         </div>
 
-        {/* Right side: Partnership Lockup */}
-        <div className="flex flex-col items-center gap-1 md:translate-x-16">
-          <span className="text-[11px] font-bold tracking-widest uppercase text-[var(--text-dim)]">
-            In partnership with
-          </span>
-          <div className="flex items-center">
-            <img src={axenLogo} alt="AXEN" className="h-20 object-contain axen-logo" />
-          </div>
-        </div>
 
       </div>
     </footer>

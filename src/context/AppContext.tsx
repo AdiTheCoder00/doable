@@ -143,6 +143,13 @@ function reducer(state: AppState, action: Action): AppState {
         ),
       };
       const allDone = newRoadmap.milestones.every((m) => m.tasks.every((t) => t.done));
+      const wasAllDone = state.roadmap.milestones.every((m) => m.tasks.every((t) => t.done));
+      
+      let newToasts = state.toasts;
+      if (!wasAllDone && allDone) {
+        newToasts = [...newToasts, { id: crypto.randomUUID(), message: '🎉 Roadmap complete! Great work.' }];
+      }
+
       const completedSteps = newRoadmap.milestones.reduce((acc, m) => acc + m.tasks.filter(t => t.done).length, 0);
       const totalSteps = newRoadmap.milestones.reduce((acc, m) => acc + m.tasks.length, 0);
       
@@ -186,6 +193,7 @@ function reducer(state: AppState, action: Action): AppState {
         unlocked: newUnlocked,
         pendingTask: null,
         recent: newRecent,
+        toasts: newToasts,
       };
     }
     case 'CLOSE_MODAL':
@@ -344,18 +352,12 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const completeTask = useCallback((task?: PendingTask) => {
-    const targetTask = task || state.pendingTask;
-    if (targetTask && state.roadmap) {
-      const incompleteCount = state.roadmap.milestones.reduce((acc, m) => acc + m.tasks.filter(t => !t.done).length, 0);
-      const isLastTask = incompleteCount === 1;
-      
-      dispatch({ type: 'COMPLETE_TASK', pendingTask: targetTask });
-      
-      if (isLastTask) {
-        addToast('🎉 Roadmap complete! Great work.');
-      }
+    if (task) {
+      dispatch({ type: 'COMPLETE_TASK', pendingTask: task });
+    } else if (state.pendingTask) {
+      dispatch({ type: 'COMPLETE_TASK', pendingTask: state.pendingTask });
     }
-  }, [state.pendingTask, state.roadmap, addToast]);
+  }, [state.pendingTask]);
 
   const closeModal = useCallback(() => {
     dispatch({ type: 'CLOSE_MODAL' });

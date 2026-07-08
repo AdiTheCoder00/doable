@@ -2,7 +2,6 @@ import { useMemo, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Float, Edges, ContactShadows, Html } from '@react-three/drei';
 import { House3D, Tree3D, Rock3D } from './Props3D';
-import rickRollVideo from '../../assets/Rickroll {HD + No ads}.mp4';
 import type { Task } from '../../types';
 
 function seededRandom(seed: number) {
@@ -46,7 +45,6 @@ for (let x = -2; x <= 2; x++) {
 
 export default function World3D({ buildingsCount, tasks }: { buildingsCount: number, tasks: Task[] }) {
   const positions = useMemo(() => getSpiralPositions(buildingsCount), [buildingsCount]);
-  const [isPlaying, setIsPlaying] = useState(false);
   const [hovered, setHovered] = useState(false);
 
   return (
@@ -93,13 +91,6 @@ export default function World3D({ buildingsCount, tasks }: { buildingsCount: num
           {/* Buildings */}
           <group 
             position={[0, 0.2, 0]}
-            onClick={(e) => {
-              e.stopPropagation();
-              // Only trigger if mouse hasn't moved much (not dragging)
-              if (e.delta <= 2) {
-                setIsPlaying(true);
-              }
-            }}
             onPointerOver={(e) => {
               e.stopPropagation();
               document.body.style.cursor = 'pointer';
@@ -144,24 +135,6 @@ export default function World3D({ buildingsCount, tasks }: { buildingsCount: num
         </group>
       </Float>
     </Canvas>
-
-    {isPlaying && (
-      <div className="fixed inset-0 z-[9999] bg-black flex flex-col items-center justify-center">
-        <video 
-          src={rickRollVideo} 
-          autoPlay 
-          controls 
-          className="w-full h-full max-h-screen object-contain"
-          onEnded={() => setIsPlaying(false)}
-        />
-        <button 
-          onClick={() => setIsPlaying(false)}
-          className="absolute top-6 right-6 text-white bg-white/20 hover:bg-white/40 backdrop-blur-sm px-4 py-2 rounded-full font-bold transition-colors"
-        >
-          Close Video
-        </button>
-      </div>
-    )}
     </>
   );
 }
