@@ -1,12 +1,20 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useApp } from '../../context/AppContext';
+import { Trash2 } from 'lucide-react';
 import ChatEntryComponent from './ChatEntry';
 import { Button } from '../ui/button';
 import { motion } from 'framer-motion';
 
 export default function ChatColumn() {
-  const { state, askQuestion } = useApp();
+  const { state, askQuestion, clearChat } = useApp();
   const [input, setInput] = useState('');
+  const chatTopRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (state.chatLog.length > 0) {
+      chatTopRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [state.chatLog.length]);
 
   const handleAsk = () => {
     const trimmed = input.trim();
@@ -29,7 +37,18 @@ export default function ChatColumn() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
       >
-        <h1 id="ask-heading">What do you want to know?</h1>
+        <div className="flex justify-between items-start mb-2">
+          <h1 id="ask-heading">What do you want to know?</h1>
+          {state.chatLog.length > 0 && (
+            <button 
+              onClick={clearChat}
+              className="text-[var(--text-dim)] hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/20 p-2 rounded-lg transition-colors flex items-center gap-2"
+              title="Clear Chat"
+            >
+              <Trash2 size={18} />
+            </button>
+          )}
+        </div>
         <p>Ask it like you'd ask any AI. You'll get a real answer first — the plan is optional.</p>
         <textarea
           id="goal-input"
@@ -67,6 +86,7 @@ export default function ChatColumn() {
         </div>
       </motion.div>
       <div id="chat-log">
+        <div ref={chatTopRef} />
         {[...state.chatLog].reverse().map((entry) => (
           <ChatEntryComponent key={entry.id} entry={entry} />
         ))}

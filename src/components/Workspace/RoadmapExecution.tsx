@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useApp } from '../../context/AppContext';
 import { ArrowLeft, Upload, Check, Plus } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import confetti from 'canvas-confetti';
 
 export default function RoadmapExecution() {
   const { state, setView, completeTask, clearRoadmap } = useApp();
@@ -30,7 +31,44 @@ export default function RoadmapExecution() {
   
   // If all are done, activeIndex is -1.
 
-  const handleSubmit = (mIdx: number, tIdx: number) => {
+  const playPopSound = () => {
+    try {
+      const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+      const oscillator = audioCtx.createOscillator();
+      const gainNode = audioCtx.createGain();
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(audioCtx.destination);
+      
+      oscillator.type = 'sine';
+      oscillator.frequency.setValueAtTime(800, audioCtx.currentTime);
+      oscillator.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.1);
+      
+      gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+      
+      oscillator.start();
+      oscillator.stop(audioCtx.currentTime + 0.1);
+    } catch (e) {
+      console.error("Audio error", e);
+    }
+  };
+
+  const handleSubmit = (mIdx: number, tIdx: number, e: React.MouseEvent) => {
+    const rect = (e.target as HTMLElement).getBoundingClientRect();
+    const x = (rect.left + rect.width / 2) / window.innerWidth;
+    const y = (rect.top + rect.height / 2) / window.innerHeight;
+
+    confetti({
+      particleCount: 50,
+      spread: 60,
+      origin: { x, y },
+      colors: ['#f97316', '#22c55e', '#3b82f6', '#eab308'],
+      zIndex: 1000
+    });
+
+    playPopSound();
+    
     completeTask({ mIdx, tIdx });
     setDesc('');
     setImage(null);
@@ -172,7 +210,7 @@ export default function RoadmapExecution() {
                       />
 
                       <button 
-                        onClick={() => handleSubmit(step.mIdx, step.tIdx)}
+                        onClick={(e) => handleSubmit(step.mIdx, step.tIdx, e)}
                         disabled={!desc.trim() && !image}
                         className={`w-full rounded-xl py-3.5 text-[15px] font-bold text-white transition-all ${
                           (!desc.trim() && !image)

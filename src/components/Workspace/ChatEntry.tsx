@@ -3,6 +3,7 @@ import type { ChatEntry as ChatEntryType } from '../../types';
 import { useApp } from '../../context/AppContext';
 import { Button } from '../ui/button';
 import { Copy, Check } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
 
 import { motion } from 'framer-motion';
 
@@ -57,7 +58,9 @@ export default function ChatEntry({ entry }: Props) {
               {copied ? <Check size={16} className="text-green-500" /> : <Copy size={16} />}
             </button>
           </div>
-          <div className="answer-text">{entry.answer}</div>
+          <div className="answer-text markdown-body">
+            <ReactMarkdown>{entry.answer || ''}</ReactMarkdown>
+          </div>
 
           {!entry.decided && (
             <div className="followup-inline">

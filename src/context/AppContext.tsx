@@ -62,7 +62,8 @@ type Action =
   | { type: 'DELETE_HISTORY'; id: string }
   | { type: 'UNDO_DELETE' }
   | { type: 'CLEAR_HISTORY' }
-  | { type: 'RESET_ALL' };
+  | { type: 'RESET_ALL' }
+  | { type: 'CLEAR_CHAT' };
 
 function reducer(state: AppState, action: Action): AppState {
   switch (action.type) {
@@ -244,6 +245,11 @@ function reducer(state: AppState, action: Action): AppState {
         ...initialState,
         theme: state.theme, // Preserve theme preference
       };
+    case 'CLEAR_CHAT':
+      return {
+        ...state,
+        chatLog: [],
+      };
     default:
       return state;
   }
@@ -270,6 +276,7 @@ interface AppContextType {
   undoDelete: () => void;
   clearHistory: () => void;
   resetApp: () => void;
+  clearChat: () => void;
 }
 
 const AppContext = createContext<AppContextType | null>(null);
@@ -396,6 +403,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
+  const clearChat = useCallback(() => {
+    dispatch({ type: 'CLEAR_CHAT' });
+  }, []);
+
   const contextValue = useMemo(() => ({
     state,
     dispatch,
@@ -417,6 +428,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     undoDelete,
     clearHistory,
     resetApp,
+    clearChat,
   }), [
     state,
     dispatch,
@@ -437,7 +449,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
     deleteHistory,
     undoDelete,
     clearHistory,
-    resetApp
+    resetApp,
+    clearChat
   ]);
 
   return (
