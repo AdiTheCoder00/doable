@@ -350,7 +350,14 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   const addToast = useCallback((msg: string, action?: { label: string; onClick: () => void }) => {
     const id = crypto.randomUUID();
-    dispatch({ type: 'ADD_TOAST', message: msg, id, action });
+    const wrappedAction = action ? {
+      ...action,
+      onClick: () => {
+        action.onClick();
+        dispatch({ type: 'REMOVE_TOAST', id });
+      }
+    } : undefined;
+    dispatch({ type: 'ADD_TOAST', message: msg, id, action: wrappedAction });
     setTimeout(() => dispatch({ type: 'REMOVE_TOAST', id }), 5000); // Give users more time to undo
   }, []);
 

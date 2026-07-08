@@ -62,7 +62,9 @@ export default function Rewards() {
                     <motion.div
                       key={r.id}
                       onClick={() => {
-                        if (isClickable) setTheme(r.id as Theme);
+                        if (isClickable) {
+                          setTheme(isActiveTheme ? 'light' : r.id as Theme);
+                        }
                       }}
                       initial={{ opacity: 0, y: 15 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -104,7 +106,7 @@ export default function Rewards() {
                       {/* Bottom Price / Status */}
                       <div className="mt-auto font-bold text-[15px]">
                         {isActiveTheme ? (
-                          <span className="text-[var(--accent)]">Active</span>
+                          <span className="text-[var(--accent)]">Active (tap to disable)</span>
                         ) : isUnlocked ? (
                           <span className="text-green-600 dark:text-green-500">Unlocked</span>
                         ) : (
