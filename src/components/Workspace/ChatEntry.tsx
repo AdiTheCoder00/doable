@@ -1,6 +1,8 @@
+import { useState } from 'react';
 import type { ChatEntry as ChatEntryType } from '../../types';
 import { useApp } from '../../context/AppContext';
 import { Button } from '../ui/button';
+import { Copy, Check } from 'lucide-react';
 
 import { motion } from 'framer-motion';
 
@@ -10,6 +12,18 @@ interface Props {
 
 export default function ChatEntry({ entry }: Props) {
   const { decideYes, decideNo } = useApp();
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = async () => {
+    if (!entry.answer) return;
+    try {
+      await navigator.clipboard.writeText(entry.answer);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    } catch (err) {
+      console.error('Failed to copy text', err);
+    }
+  };
 
   return (
     <motion.div 
@@ -33,7 +47,16 @@ export default function ChatEntry({ entry }: Props) {
         <>
           <div className="answer-q">You asked</div>
           <div className="answer-text" style={{ marginBottom: '18px' }}>{entry.question}</div>
-          <div className="answer-q">Doable</div>
+          <div className="flex items-center justify-between mb-1">
+            <div className="answer-q mb-0">Doable</div>
+            <button 
+              onClick={handleCopy}
+              className="flex items-center justify-center p-1.5 text-[var(--text-dim)] hover:text-[var(--text)] hover:bg-[var(--bg-elev-2)] rounded-md transition-colors"
+              title="Copy answer"
+            >
+              {copied ? <Check size={16} className="text-green-500" /> : <Copy size={16} />}
+            </button>
+          </div>
           <div className="answer-text">{entry.answer}</div>
 
           {!entry.decided && (

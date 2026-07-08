@@ -36,6 +36,12 @@ export default function ChatColumn() {
           placeholder="e.g. How do I get started with Python basics?"
           value={input}
           onChange={(e) => setInput(e.target.value)}
+          onKeyDown={(e) => {
+            if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+              e.preventDefault();
+              handleAsk();
+            }
+          }}
         />
         <Button id="ask-btn" style={{ borderRadius: '12px' }} onClick={handleAsk}>Ask Doable</Button>
         <div className="chip-examples">

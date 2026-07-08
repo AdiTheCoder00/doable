@@ -11,17 +11,23 @@ const initialState: AppState = {
   view: 'dashboard',
   roadmap: null,
   recent: [],
+  recentlyDeleted: null,
   unlocked: {},
   chatLog: [],
   pendingTask: null,
   toasts: [],
 };
 
+const STORAGE_VERSION = 1;
+
 function init(initial: AppState): AppState {
   try {
     const saved = localStorage.getItem('doable-state');
     if (saved) {
       const parsed = JSON.parse(saved);
+      if (parsed.version !== STORAGE_VERSION) {
+        return initial;
+      }
       return { 
         ...initial, 
         ...parsed, 
@@ -42,19 +48,21 @@ type Action =
   | { type: 'EXIT_APP' }
   | { type: 'SET_VIEW'; view: View }
   | { type: 'ASK_QUESTION'; entry: ChatEntry }
-  | { type: 'RECEIVE_ANSWER'; id: number; answer: string; templateKey: string }
-  | { type: 'DECIDE_NO'; id: number }
-  | { type: 'DECIDE_YES'; id: number; seriousness: Seriousness }
-  | { type: 'SET_SERIOUSNESS'; id: number; seriousness: Seriousness }
+  | { type: 'RECEIVE_ANSWER'; id: string; answer: string; templateKey: string }
+  | { type: 'DECIDE_NO'; id: string }
+  | { type: 'DECIDE_YES'; id: string; seriousness: Seriousness }
+  | { type: 'SET_SERIOUSNESS'; id: string; seriousness: Seriousness }
   | { type: 'OPEN_PROOF_MODAL'; pendingTask: PendingTask }
   | { type: 'COMPLETE_TASK'; pendingTask: PendingTask }
   | { type: 'CLOSE_MODAL' }
-  | { type: 'ADD_TOAST'; message: string }
-  | { type: 'REMOVE_TOAST' }
+  | { type: 'ADD_TOAST'; message: string; id: string; action?: { label: string; onClick: () => void } }
+  | { type: 'REMOVE_TOAST'; id: string }
   | { type: 'CLEAR_ROADMAP' }
   | { type: 'RESUME_TASK'; id: string }
   | { type: 'DELETE_HISTORY'; id: string }
-  | { type: 'CLEAR_HISTORY' };
+  | { type: 'UNDO_DELETE' }
+  | { type: 'CLEAR_HISTORY' }
+  | { type: 'RESET_ALL' };
 
 function reducer(state: AppState, action: Action): AppState {
   switch (action.type) {
@@ -94,7 +102,7 @@ function reducer(state: AppState, action: Action): AppState {
         ...state,
         chatLog: state.chatLog.filter((e) => e.id !== action.id),
         recent: [
-          { id: Date.now().toString(), title: entry?.question ?? '', date: new Date().toLocaleDateString(), done: false, chatOnly: true },
+          { id: crypto.randomUUID(), title: entry?.question ?? '', date: new Date().toLocaleDateString(), done: false, chatOnly: true },
           ...state.recent,
         ],
       };
@@ -147,11 +155,12 @@ function reducer(state: AppState, action: Action): AppState {
       const newTotal = state.totalCompletedTasks + 1;
       
       // Streak calculation
-      const today = new Date().toDateString();
+      const now = new Date();
+      const todayUTC = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate())).toISOString();
       let newStreak = state.streak;
       if (state.lastCompletedDate) {
         const last = new Date(state.lastCompletedDate);
-        const curr = new Date(today);
+        const curr = new Date(todayUTC);
         const diffDays = Math.round((curr.getTime() - last.getTime()) / (1000 * 3600 * 24));
         if (diffDays === 1) {
           newStreak += 1;
@@ -173,7 +182,7 @@ function reducer(state: AppState, action: Action): AppState {
         roadmap: newRoadmap,
         totalCompletedTasks: newTotal,
         streak: newStreak,
-        lastCompletedDate: today,
+        lastCompletedDate: todayUTC,
         unlocked: newUnlocked,
         pendingTask: null,
         recent: newRecent,
@@ -182,9 +191,9 @@ function reducer(state: AppState, action: Action): AppState {
     case 'CLOSE_MODAL':
       return { ...state, pendingTask: null };
     case 'ADD_TOAST':
-      return { ...state, toasts: [...state.toasts, action.message] };
+      return { ...state, toasts: [...state.toasts, { id: action.id, message: action.message, action: action.action }] };
     case 'REMOVE_TOAST':
-      return { ...state, toasts: state.toasts.slice(1) };
+      return { ...state, toasts: state.toasts.filter(t => t.id !== action.id) };
     case 'CLEAR_ROADMAP':
       return { ...state, roadmap: null, chatLog: [], pendingTask: null };
     case 'RESUME_TASK': {
@@ -197,15 +206,35 @@ function reducer(state: AppState, action: Action): AppState {
         view: 'workspace',
       };
     }
-    case 'DELETE_HISTORY':
+    case 'DELETE_HISTORY': {
+      const index = state.recent.findIndex(r => r.id === action.id);
+      if (index === -1) return state;
+      const item = state.recent[index];
       return {
         ...state,
         recent: state.recent.filter((r) => r.id !== action.id),
+        recentlyDeleted: { item, index },
       };
+    }
+    case 'UNDO_DELETE': {
+      if (!state.recentlyDeleted) return state;
+      const newRecent = [...state.recent];
+      newRecent.splice(state.recentlyDeleted.index, 0, state.recentlyDeleted.item);
+      return {
+        ...state,
+        recent: newRecent,
+        recentlyDeleted: null,
+      };
+    }
     case 'CLEAR_HISTORY':
       return {
         ...state,
         recent: [],
+      };
+    case 'RESET_ALL':
+      return {
+        ...initialState,
+        theme: state.theme, // Preserve theme preference
       };
     default:
       return state;
@@ -216,13 +245,13 @@ interface AppContextType {
   state: AppState;
   dispatch: React.Dispatch<Action>;
   askQuestion: (text: string) => void;
-  decideYes: (id: number, seriousness: Seriousness) => void;
-  decideNo: (id: number) => void;
-  setSeriousness: (id: number, seriousness: Seriousness) => void;
+  decideYes: (id: string, seriousness: Seriousness) => void;
+  decideNo: (id: string) => void;
+  setSeriousness: (id: string, seriousness: Seriousness) => void;
   openProofModal: (mIdx: number, tIdx: number) => void;
   completeTask: (task?: PendingTask) => void;
   closeModal: () => void;
-  addToast: (msg: string) => void;
+  addToast: (msg: string, action?: { label: string; onClick: () => void }) => void;
   enterApp: () => void;
   exitApp: () => void;
   setView: (view: View) => void;
@@ -230,7 +259,9 @@ interface AppContextType {
   clearRoadmap: () => void;
   resumeTask: (id: string) => void;
   deleteHistory: (id: string) => void;
+  undoDelete: () => void;
   clearHistory: () => void;
+  resetApp: () => void;
 }
 
 const AppContext = createContext<AppContextType | null>(null);
@@ -240,6 +271,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     localStorage.setItem('doable-state', JSON.stringify({
+      version: STORAGE_VERSION,
       theme: state.theme,
       totalCompletedTasks: state.totalCompletedTasks,
       streak: state.streak,
@@ -272,7 +304,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   const askQuestion = useCallback((text: string) => {
     const entry: ChatEntry = {
-      id: Date.now(),
+      id: crypto.randomUUID(),
       question: text,
       answering: true,
       answer: null,
@@ -289,16 +321,22 @@ export function AppProvider({ children }: { children: ReactNode }) {
     }, 1100);
   }, []);
 
-  const decideYes = useCallback((id: number, seriousness: Seriousness) => {
+  const decideYes = useCallback((id: string, seriousness: Seriousness) => {
     dispatch({ type: 'DECIDE_YES', id, seriousness });
   }, []);
 
-  const decideNo = useCallback((id: number) => {
+  const decideNo = useCallback((id: string) => {
     dispatch({ type: 'DECIDE_NO', id });
   }, []);
 
-  const setSeriousness = useCallback((id: number, seriousness: Seriousness) => {
+  const setSeriousness = useCallback((id: string, seriousness: Seriousness) => {
     dispatch({ type: 'SET_SERIOUSNESS', id, seriousness });
+  }, []);
+
+  const addToast = useCallback((msg: string, action?: { label: string; onClick: () => void }) => {
+    const id = crypto.randomUUID();
+    dispatch({ type: 'ADD_TOAST', message: msg, id, action });
+    setTimeout(() => dispatch({ type: 'REMOVE_TOAST', id }), 5000); // Give users more time to undo
   }, []);
 
   const openProofModal = useCallback((mIdx: number, tIdx: number) => {
@@ -306,20 +344,21 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const completeTask = useCallback((task?: PendingTask) => {
-    if (task) {
-      dispatch({ type: 'COMPLETE_TASK', pendingTask: task });
-    } else if (state.pendingTask) {
-      dispatch({ type: 'COMPLETE_TASK', pendingTask: state.pendingTask });
+    const targetTask = task || state.pendingTask;
+    if (targetTask && state.roadmap) {
+      const incompleteCount = state.roadmap.milestones.reduce((acc, m) => acc + m.tasks.filter(t => !t.done).length, 0);
+      const isLastTask = incompleteCount === 1;
+      
+      dispatch({ type: 'COMPLETE_TASK', pendingTask: targetTask });
+      
+      if (isLastTask) {
+        addToast('🎉 Roadmap complete! Great work.');
+      }
     }
-  }, [state.pendingTask]);
+  }, [state.pendingTask, state.roadmap, addToast]);
 
   const closeModal = useCallback(() => {
     dispatch({ type: 'CLOSE_MODAL' });
-  }, []);
-
-  const addToast = useCallback((msg: string) => {
-    dispatch({ type: 'ADD_TOAST', message: msg });
-    setTimeout(() => dispatch({ type: 'REMOVE_TOAST' }), 2600);
   }, []);
 
   const clearRoadmap = useCallback(() => {
@@ -330,12 +369,29 @@ export function AppProvider({ children }: { children: ReactNode }) {
     dispatch({ type: 'RESUME_TASK', id });
   }, []);
 
+  const undoDelete = useCallback(() => {
+    dispatch({ type: 'UNDO_DELETE' });
+  }, []);
+
   const deleteHistory = useCallback((id: string) => {
     dispatch({ type: 'DELETE_HISTORY', id });
-  }, []);
+    addToast('Item removed', {
+      label: 'Undo',
+      onClick: () => {
+        undoDelete();
+      }
+    });
+  }, [addToast, undoDelete]);
 
   const clearHistory = useCallback(() => {
     dispatch({ type: 'CLEAR_HISTORY' });
+  }, []);
+
+  const resetApp = useCallback(() => {
+    if (window.confirm("Are you sure you want to completely wipe all app data? This cannot be undone.")) {
+      localStorage.removeItem('doable-state');
+      dispatch({ type: 'RESET_ALL' });
+    }
   }, []);
 
   const contextValue = useMemo(() => ({
@@ -356,7 +412,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
     clearRoadmap,
     resumeTask,
     deleteHistory,
+    undoDelete,
     clearHistory,
+    resetApp,
   }), [
     state,
     dispatch,
@@ -375,7 +433,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
     clearRoadmap,
     resumeTask,
     deleteHistory,
-    clearHistory
+    undoDelete,
+    clearHistory,
+    resetApp
   ]);
 
   return (

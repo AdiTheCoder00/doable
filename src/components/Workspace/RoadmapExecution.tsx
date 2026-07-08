@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useApp } from '../../context/AppContext';
 import { ArrowLeft, Upload, Check, Plus } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -7,7 +7,6 @@ export default function RoadmapExecution() {
   const { state, setView, completeTask, clearRoadmap } = useApp();
   const [desc, setDesc] = useState('');
   const [image, setImage] = useState<string | null>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     return () => {
@@ -62,6 +61,24 @@ export default function RoadmapExecution() {
         <div className="text-sm text-[var(--text-dim)]">
           {completed} of {total} steps complete
         </div>
+        
+        <AnimatePresence>
+          {completed === total && total > 0 && (
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.8, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              transition={{ type: "spring", bounce: 0.5 }}
+              className="rounded-xl border border-green-200 bg-green-50 dark:border-green-900/50 dark:bg-green-950/20 p-6 text-center"
+            >
+              <h2 className="text-2xl font-bold text-green-700 dark:text-green-400 mb-2">
+                🎉 Roadmap Complete!
+              </h2>
+              <p className="text-green-600 dark:text-green-500">
+                Incredible work getting through all the steps. You did it!
+              </p>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
       <div className="flex flex-col gap-4">
@@ -116,8 +133,8 @@ export default function RoadmapExecution() {
                       
                       <input 
                         type="file" 
-                        ref={fileInputRef} 
-                        className="hidden" 
+                        id={`file-upload-${index}`}
+                        className="sr-only" 
                         accept="image/*"
                         onChange={(e) => {
                           if (e.target.files && e.target.files.length > 0) {
@@ -126,9 +143,9 @@ export default function RoadmapExecution() {
                           }
                         }}
                       />
-                      <div 
-                        onClick={() => fileInputRef.current?.click()}
-                        className={`flex cursor-pointer flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed py-10 transition-colors mb-4 ${
+                      <label 
+                        htmlFor={`file-upload-${index}`}
+                        className={`flex cursor-pointer flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed py-10 transition-colors mb-4 focus-within:ring-2 focus-within:ring-[var(--accent)] ${
                           image 
                             ? 'border-green-500 bg-green-50 dark:bg-green-950/20' 
                             : 'border-[var(--border)] bg-[var(--bg)]/50 hover:bg-[var(--bg-elev-2)] hover:border-[var(--text-dim)]'
@@ -145,7 +162,7 @@ export default function RoadmapExecution() {
                             <span className="text-[14px] font-medium text-[var(--text-dim)]">Tap to upload a screenshot or photo</span>
                           </>
                         )}
-                      </div>
+                      </label>
 
                       <textarea
                         className="w-full min-h-[90px] rounded-xl border border-[var(--border)] bg-[var(--bg-elev)] p-4 text-[14px] text-[var(--text)] placeholder:text-[var(--text-faint)] focus:border-[var(--accent)] focus:outline-none focus:ring-1 focus:ring-[var(--accent)] mb-4 resize-y"

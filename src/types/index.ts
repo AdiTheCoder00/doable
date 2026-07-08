@@ -33,7 +33,7 @@ export interface RecentItem {
 }
 
 export interface ChatEntry {
-  id: number;
+  id: string;
   question: string;
   answering: boolean;
   answer: string | null;
@@ -65,8 +65,9 @@ export interface AppState {
   view: View;
   roadmap: Roadmap | null;
   recent: RecentItem[];
+  recentlyDeleted: { item: RecentItem; index: number } | null;
   unlocked: Record<string, boolean>;
   chatLog: ChatEntry[];
   pendingTask: PendingTask | null;
-  toasts: string[];
+  toasts: { id: string; message: string; action?: { label: string; onClick: () => void } }[];
 }
